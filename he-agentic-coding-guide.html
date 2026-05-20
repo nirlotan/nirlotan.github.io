@@ -1,0 +1,1766 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>תכנות אג'נטי ו-Vibe Coding — מדריך למשתמש</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;700;800&family=Assistant:wght@300;400;600;700&family=Rubik:wght@400;500;700&family=Assistant+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<style>
+/* ─── Design Tokens ────────────────────────────────────────────────── */
+:root {
+  --slate-navy:    #1A2A3A;
+  --bright-copper: #D96C06;
+  --steel-gray:    #8E9BAE;
+  --crisp-white:   #F8F9FA;
+  --pure-white:    #FFFFFF;
+  --copper-light:  #F2820C18;
+  --copper-mid:    #D96C0620;
+  --navy-mid:      #2A3F54;
+  --border:        #D0D7E0;
+
+  --sp-sm:  8px;
+  --sp-md:  16px;
+  --sp-lg:  24px;
+  --sp-xl:  32px;
+  --sp-xxl: 64px;
+
+  --radius: 4px;
+  --sidebar-w: 280px;
+  --header-h: 64px;
+}
+
+/* ─── Reset ───────────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; font-size: 16px; }
+body {
+  font-family: 'Assistant', sans-serif;
+  font-weight: 400;
+  color: var(--slate-navy);
+  background: var(--crisp-white);
+  line-height: 1.7;
+}
+
+/* ─── Header ──────────────────────────────────────────────────────── */
+header {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  height: var(--header-h);
+  background: var(--slate-navy);
+  display: flex;
+  align-items: center;
+  padding: 0 var(--sp-xl);
+  z-index: 100;
+  border-bottom: 3px solid var(--bright-copper);
+}
+.header-logo {
+  font-family: 'Heebo', sans-serif;
+  font-weight: 800;
+  font-size: 1.1rem;
+  color: var(--pure-white);
+  letter-spacing: -0.01em;
+  display: flex;
+  align-items: center;
+  gap: var(--sp-sm);
+}
+.header-logo .accent { color: var(--bright-copper); }
+.header-tag {
+  margin-right: auto;
+  font-family: 'Rubik', monospace;
+  font-size: 0.7rem;
+  color: var(--steel-gray);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.lang-switch {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  margin-right: var(--sp-xl);
+  font-family: 'Roboto Mono', monospace;
+  font-size: 0.7rem;
+  letter-spacing: 0.06em;
+}
+.lang-switch a, .lang-switch span {
+  padding: 3px 8px;
+  border-radius: 4px;
+  text-decoration: none;
+  text-transform: uppercase;
+  transition: background 0.15s, color 0.15s;
+}
+.lang-switch a {
+  color: var(--steel-gray);
+}
+.lang-switch a:hover {
+  background: var(--navy-mid);
+  color: var(--pure-white);
+}
+.lang-switch span.active-lang {
+  background: var(--bright-copper);
+  color: var(--pure-white);
+  font-weight: 700;
+}
+.lang-switch .sep {
+  color: var(--steel-gray);
+  padding: 0;
+  font-size: 0.65rem;
+}
+
+/* ─── Layout ──────────────────────────────────────────────────────── */
+.layout {
+  display: flex;
+  padding-top: var(--header-h);
+  min-height: 100vh;
+}
+
+/* ─── Sidebar ─────────────────────────────────────────────────────── */
+nav.sidebar {
+  position: fixed;
+  top: var(--header-h);
+  right: 0;
+  bottom: 0;
+  width: var(--sidebar-w);
+  background: var(--slate-navy);
+  overflow-y: auto;
+  padding: var(--sp-lg) 0 var(--sp-xxl);
+  z-index: 90;
+}
+nav.sidebar::-webkit-scrollbar { width: 4px; }
+nav.sidebar::-webkit-scrollbar-track { background: transparent; }
+nav.sidebar::-webkit-scrollbar-thumb { background: var(--navy-mid); border-radius: 2px; }
+
+.nav-section-label {
+  font-family: 'Heebo', sans-serif;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--steel-gray);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: var(--sp-lg) var(--sp-md) var(--sp-sm);
+}
+.nav-item {
+  display: block;
+  font-family: 'Assistant', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 400;
+  color: #CBD5E1;
+  text-decoration: none;
+  padding: 7px var(--sp-md);
+  border-right: 2px solid transparent;
+  transition: all 0.15s ease;
+  line-height: 1.4;
+}
+.nav-item:hover {
+  color: var(--pure-white);
+  background: rgba(255,255,255,0.05);
+  border-right-color: var(--steel-gray);
+}
+.nav-item.active {
+  color: var(--bright-copper);
+  border-right-color: var(--bright-copper);
+  background: var(--copper-mid);
+}
+.nav-item.chapter {
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: var(--pure-white);
+  padding-top: 10px;
+  padding-bottom: 5px;
+}
+.nav-divider {
+  border: none;
+  border-top: 1px solid rgba(255,255,255,0.08);
+  margin: var(--sp-sm) var(--sp-md);
+}
+
+/* ─── Main Content ────────────────────────────────────────────────── */
+main {
+  margin-right: var(--sidebar-w);
+  flex: 1;
+  padding: var(--sp-xxl) var(--sp-xxl) var(--sp-xxl) calc(var(--sp-xxl) + 8px);
+  max-width: 920px;
+}
+
+/* ─── Hero ────────────────────────────────────────────────────────── */
+.hero {
+  background: var(--slate-navy);
+  color: var(--pure-white);
+  border-radius: var(--radius);
+  padding: var(--sp-xxl) var(--sp-xl);
+  margin-bottom: var(--sp-xxl);
+  position: relative;
+  overflow: hidden;
+}
+.hero::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0;
+  width: 320px; height: 100%;
+  background: linear-gradient(225deg, transparent 40%, rgba(217,108,6,0.12) 100%);
+  pointer-events: none;
+}
+.hero-eyebrow {
+  font-family: 'Heebo', sans-serif;
+  font-size: 0.85rem;
+  color: var(--bright-copper);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: var(--sp-md);
+}
+.hero h1 {
+  font-family: 'Heebo', sans-serif;
+  font-size: 2.8rem;
+  font-weight: 800;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+  margin-bottom: var(--sp-md);
+}
+.hero h1 span { color: var(--bright-copper); }
+.hero p {
+  font-size: 1.2rem;
+  color: #CBD5E1;
+  max-width: 600px;
+  line-height: 1.6;
+  margin-bottom: var(--sp-lg);
+}
+.hero-meta {
+  display: flex;
+  gap: var(--sp-lg);
+  flex-wrap: wrap;
+}
+.hero-meta-item {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.hero-meta-item .label {
+  font-size: 0.75rem;
+  color: var(--steel-gray);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.hero-meta-item .value {
+  font-family: 'Assistant', sans-serif;
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--pure-white);
+}
+
+/* ─── Chapter Dividers ────────────────────────────────────────────── */
+.chapter-header {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--sp-md);
+  margin: var(--sp-xxl) 0 var(--sp-lg);
+  padding-top: var(--sp-xl);
+  border-top: 2px solid var(--border);
+}
+.chapter-header:first-of-type { border-top: none; margin-top: 0; }
+.chapter-num {
+  font-family: 'Heebo', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--bright-copper);
+  background: var(--copper-light);
+  border: 1px solid var(--bright-copper);
+  border-radius: var(--radius);
+  padding: 3px 10px;
+  white-space: nowrap;
+  margin-top: 6px;
+  letter-spacing: 0.05em;
+}
+.chapter-title {
+  font-family: 'Heebo', sans-serif;
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: var(--slate-navy);
+  letter-spacing: -0.01em;
+  line-height: 1.25;
+}
+
+/* ─── Section Headers ─────────────────────────────────────────────── */
+h3 {
+  font-family: 'Heebo', sans-serif;
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--slate-navy);
+  margin: var(--sp-xl) 0 var(--sp-sm);
+}
+h4 {
+  font-family: 'Heebo', sans-serif;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--bright-copper);
+  margin: var(--sp-lg) 0 var(--sp-sm);
+}
+p { margin-bottom: var(--sp-md); color: #2A3A4A; font-size: 1.05rem; }
+
+/* ─── Key Insight Cards ───────────────────────────────────────────── */
+.insight {
+  background: var(--pure-white);
+  border: 1px solid var(--border);
+  border-right: 4px solid var(--bright-copper);
+  border-radius: var(--radius) 0 0 var(--radius);
+  padding: var(--sp-lg);
+  margin: var(--sp-lg) 0;
+}
+.insight-label {
+  font-family: 'Heebo', sans-serif;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--bright-copper);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: var(--sp-sm);
+}
+.insight p { margin: 0; font-weight: 600; color: var(--slate-navy); }
+
+.callout {
+  background: var(--copper-light);
+  border: 1px solid rgba(217,108,6,0.25);
+  border-radius: var(--radius);
+  padding: var(--sp-lg);
+  margin: var(--sp-lg) 0;
+}
+.callout p { margin: 0; }
+
+.callout.danger {
+  background: #FFF2F2;
+  border-color: #FFBABA;
+}
+.callout.danger p { color: #8B0000; }
+.callout.danger::before {
+  content: '⚠ ';
+  font-weight: 700;
+}
+
+/* ─── Numbered Steps ──────────────────────────────────────────────── */
+.steps { counter-reset: step; margin: var(--sp-lg) 0; }
+.step {
+  counter-increment: step;
+  display: flex;
+  gap: var(--sp-md);
+  margin-bottom: var(--sp-md);
+  background: var(--pure-white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: var(--sp-md) var(--sp-lg);
+  align-items: flex-start;
+}
+.step-num {
+  flex-shrink: 0;
+  width: 28px; height: 28px;
+  background: var(--slate-navy);
+  color: var(--pure-white);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Heebo', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+.step-num::before { content: counter(step); }
+.step-body h4 { margin: 0 0 4px; }
+.step-body p { margin: 0; font-size: 1rem; }
+
+/* ─── Capability Grid ─────────────────────────────────────────────── */
+.cap-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--sp-md);
+  margin: var(--sp-lg) 0;
+}
+.cap-card {
+  background: var(--pure-white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: var(--sp-lg);
+}
+.cap-card.good { border-top: 3px solid #16A34A; }
+.cap-card.caution { border-top: 3px solid #D97706; }
+.cap-card h4 {
+  color: var(--slate-navy);
+  margin: 0 0 var(--sp-sm);
+  font-size: 1.1rem;
+}
+.cap-card h4.good-label { color: #16A34A; }
+.cap-card h4.caution-label { color: #D97706; }
+.cap-card ul { padding-right: var(--sp-md); padding-left: 0; }
+.cap-card ul li { font-size: 1rem; margin-bottom: 4px; color: #2A3A4A; }
+
+/* ─── Code Blocks ─────────────────────────────────────────────────── */
+pre {
+  background: var(--slate-navy);
+  color: #E2E8F0;
+  border-radius: var(--radius);
+  padding: var(--sp-lg);
+  overflow-x: auto;
+  font-family: 'Assistant', monospace;
+  direction: ltr;
+  text-align: left;
+  font-size: 0.9rem;
+  line-height: 1.65;
+  margin: var(--sp-md) 0 var(--sp-lg);
+  position: relative;
+}
+pre .label {
+  position: absolute;
+  top: var(--sp-sm); left: var(--sp-sm);
+  font-size: 0.65rem;
+  color: var(--steel-gray);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+code { font-family: 'Assistant', monospace; font-size: 0.9em; }
+p code, li code {
+  background: #EFF2F7;
+  color: var(--slate-navy);
+  padding: 1px 5px;
+  border-radius: 3px;
+  font-size: 0.95rem;
+  direction: ltr;
+  display: inline-block;
+}
+.highlight { color: var(--bright-copper); font-weight: 600; }
+
+/* ─── Tables ──────────────────────────────────────────────────────── */
+.table-wrap { overflow-x: auto; margin: var(--sp-lg) 0; }
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 1rem;
+}
+thead th {
+  background: var(--slate-navy);
+  color: var(--pure-white);
+  font-family: 'Heebo', sans-serif;
+  font-weight: 700;
+  font-size: 0.9rem;
+  padding: var(--sp-sm) var(--sp-md);
+  text-align: right;
+  white-space: nowrap;
+}
+tbody td {
+  padding: var(--sp-sm) var(--sp-md);
+  border-bottom: 1px solid var(--border);
+  vertical-align: top;
+  line-height: 1.5;
+}
+tbody tr:last-child td { border-bottom: none; }
+tbody tr:nth-child(even) td { background: #F4F6F9; }
+.td-badge {
+  display: inline-block;
+  font-family: 'Assistant', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 600;
+  background: var(--copper-light);
+  color: var(--bright-copper);
+  border: 1px solid rgba(217,108,6,0.3);
+  border-radius: var(--radius);
+  padding: 1px 7px;
+  white-space: nowrap;
+}
+
+/* ─── Pipeline Diagram ────────────────────────────────────────────── */
+.pipeline {
+  display: flex;
+  align-items: stretch;
+  gap: 0;
+  margin: var(--sp-lg) 0;
+  overflow-x: auto;
+  padding-bottom: var(--sp-sm);
+}
+.pipe-step {
+  flex: 1;
+  min-width: 110px;
+  background: var(--pure-white);
+  border: 1px solid var(--border);
+  padding: var(--sp-md) var(--sp-sm);
+  text-align: center;
+  position: relative;
+}
+.pipe-step:first-child { border-radius: 0 var(--radius) var(--radius) 0; }
+.pipe-step:last-child { border-radius: var(--radius) 0 0 var(--radius); }
+.pipe-step + .pipe-step { border-right: none; }
+.pipe-step.active {
+  background: var(--slate-navy);
+  border-color: var(--slate-navy);
+}
+.pipe-step.active .pipe-label { color: var(--pure-white); }
+.pipe-step.active .pipe-num { background: var(--bright-copper); color: var(--pure-white); }
+.pipe-num {
+  width: 24px; height: 24px;
+  background: var(--crisp-white);
+  border: 1px solid var(--border);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  margin: 0 auto var(--sp-sm);
+  font-family: 'Heebo', sans-serif;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--slate-navy);
+}
+.pipe-label {
+  font-family: 'Heebo', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--slate-navy);
+  line-height: 1.3;
+}
+.pipe-sublabel {
+  font-size: 0.8rem;
+  color: var(--steel-gray);
+  margin-top: 3px;
+  line-height: 1.3;
+}
+
+/* ─── Architecture Cards ──────────────────────────────────────────── */
+.arch-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--sp-md);
+  margin: var(--sp-lg) 0;
+}
+.arch-card {
+  background: var(--pure-white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: var(--sp-lg);
+}
+.arch-card h4 {
+  color: var(--slate-navy);
+  font-size: 1rem;
+  margin: 0 0 var(--sp-sm);
+  display: flex;
+  align-items: center;
+  gap: var(--sp-sm);
+}
+.arch-badge {
+  font-family: 'Assistant', sans-serif;
+  font-size: 0.8rem;
+  background: var(--crisp-white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1px 6px;
+  color: var(--steel-gray);
+  flex-shrink: 0;
+}
+.arch-card p { font-size: 0.95rem; color: #3A4A5A; margin-bottom: var(--sp-sm); }
+.arch-pro, .arch-con {
+  font-size: 0.9rem;
+  padding: 2px 0;
+  display: flex;
+  gap: 5px;
+  align-items: baseline;
+}
+.arch-pro::before { content: '+'; color: #16A34A; font-weight: 700; }
+.arch-con::before { content: '−'; color: #DC2626; font-weight: 700; }
+
+/* ─── Summary / Exec Summary Table ───────────────────────────────── */
+.exec-summary {
+  background: var(--slate-navy);
+  border-radius: var(--radius);
+  overflow: hidden;
+  margin: var(--sp-xl) 0;
+}
+.exec-summary table { font-size: 1rem; }
+.exec-summary thead th {
+  background: var(--bright-copper);
+  color: var(--pure-white);
+  padding: var(--sp-md) var(--sp-lg);
+}
+.exec-summary tbody td {
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+  padding: var(--sp-md) var(--sp-lg);
+  color: #CBD5E1;
+}
+.exec-summary tbody tr:nth-child(even) td { background: rgba(255,255,255,0.03); }
+.exec-summary tbody td:first-child {
+  font-family: 'Assistant', sans-serif;
+  color: var(--bright-copper);
+  font-size: 0.95rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+/* ─── Validation Levels ───────────────────────────────────────────── */
+.validation-levels {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--sp-sm);
+  margin: var(--sp-lg) 0;
+}
+.val-level {
+  background: var(--pure-white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: var(--sp-md);
+  text-align: center;
+}
+.val-num {
+  font-family: 'Heebo', sans-serif;
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: var(--bright-copper);
+  line-height: 1;
+  margin-bottom: var(--sp-sm);
+}
+.val-name {
+  font-family: 'Heebo', sans-serif;
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: var(--slate-navy);
+  margin-bottom: 4px;
+}
+.val-desc {
+  font-size: 0.85rem;
+  color: var(--steel-gray);
+  line-height: 1.4;
+}
+
+/* ─── Metrics Cards ───────────────────────────────────────────────── */
+.metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--sp-md);
+  margin: var(--sp-lg) 0;
+}
+.metric-card {
+  background: var(--pure-white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: var(--sp-lg);
+}
+.metric-icon {
+  font-size: 1.6rem;
+  margin-bottom: var(--sp-sm);
+}
+.metric-name {
+  font-family: 'Heebo', sans-serif;
+  font-weight: 700;
+  font-size: 1rem;
+  color: var(--slate-navy);
+  margin-bottom: 4px;
+}
+.metric-desc { font-size: 0.9rem; color: var(--steel-gray); }
+
+/* ─── Best-practice chips ─────────────────────────────────────────── */
+.chips { display: flex; flex-wrap: wrap; gap: var(--sp-sm); margin: var(--sp-md) 0; }
+.chip {
+  font-family: 'Assistant', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 600;
+  background: var(--copper-light);
+  color: var(--bright-copper);
+  border: 1px solid rgba(217,108,6,0.25);
+  border-radius: var(--radius);
+  padding: 4px 12px;
+}
+
+/* ─── Golden Rule ─────────────────────────────────────────────────── */
+.golden-rule {
+  background: var(--slate-navy);
+  border-radius: var(--radius);
+  padding: var(--sp-xl);
+  text-align: center;
+  margin: var(--sp-xl) 0;
+}
+.golden-rule code {
+  font-family: 'Assistant', monospace;
+  font-size: 1.3rem;
+  color: var(--bright-copper);
+  display: block;
+  margin-bottom: var(--sp-sm);
+  direction: ltr;
+}
+.golden-rule p { color: var(--steel-gray); font-size: 1rem; margin: 0; }
+
+/* ─── Footer ──────────────────────────────────────────────────────── */
+footer {
+  margin-right: var(--sidebar-w);
+  background: var(--slate-navy);
+  color: var(--steel-gray);
+  padding: var(--sp-xl);
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-lg);
+  border-top: 3px solid var(--bright-copper);
+}
+footer .brand { font-family: 'Heebo', sans-serif; font-weight: 800; color: var(--pure-white); }
+footer .brand span { color: var(--bright-copper); }
+
+/* ─── Print ───────────────────────────────────────────────────────── */
+@media print {
+  nav.sidebar { display: none; }
+  header { position: relative; }
+  main { margin-right: 0; padding: var(--sp-xl); }
+  footer { margin-right: 0; }
+  .chapter-header { break-before: page; }
+  .chapter-header:first-of-type { break-before: avoid; }
+  pre { white-space: pre-wrap; }
+}
+
+/* ─── Responsive ──────────────────────────────────────────────────── */
+@media (max-width: 900px) {
+  nav.sidebar { display: none; }
+  main { margin-right: 0; padding: var(--sp-xl) var(--sp-lg); }
+  footer { margin-right: 0; }
+  .cap-grid { grid-template-columns: 1fr; }
+  .arch-grid { grid-template-columns: 1fr; }
+  .validation-levels { grid-template-columns: repeat(2, 1fr); }
+  .metrics-grid { grid-template-columns: 1fr 1fr; }
+}
+
+/* ─── Scroll highlight ────────────────────────────────────────────── */
+section[id] { scroll-margin-top: calc(var(--header-h) + 24px); }
+</style>
+</head>
+<body>
+
+<!-- ═══ HEADER ═══════════════════════════════════════════════════════ -->
+<header>
+  <div class="header-logo">
+    <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
+      <rect x="1" y="1" width="20" height="20" rx="3" fill="none" stroke="#D96C06" stroke-width="1.5"/>
+      <path d="M6 11 L10 7 L14 11 L10 15 Z" fill="#D96C06"/>
+      <circle cx="16" cy="6" r="2" fill="#D96C06" opacity="0.6"/>
+    </svg>
+    NL<span class="accent"> Practical AI</span>
+  </div>
+  <div class="header-tag">תכנות אג'נטי — מדריך למשתמש · v1.0</div>
+  <div class="lang-switch">
+    <a href="agentic-coding-guide.html">EN</a>
+    <span class="sep">|</span>
+    <span class="active-lang">HE</span>
+  </div>
+</header>
+
+<!-- ═══ LAYOUT ═══════════════════════════════════════════════════════ -->
+<div class="layout">
+
+<!-- ═══ SIDEBAR ══════════════════════════════════════════════════════ -->
+<nav class="sidebar">
+  <div class="nav-section-label">סקירה כללית</div>
+  <a class="nav-item" href="#hero">מבוא</a>
+  <hr class="nav-divider"/>
+
+  <div class="nav-section-label">פרקים</div>
+
+  <a class="nav-item chapter" href="#ch1">01 — המודל המנטלי</a>
+  <a class="nav-item" href="#ch1-1">אתם הדרג הבכיר</a>
+  <a class="nav-item" href="#ch1-2">שלוש מגמות בתעשייה</a>
+  <a class="nav-item" href="#ch1-3">יתרונות ומגבלות</a>
+  <hr class="nav-divider"/>
+
+  <a class="nav-item chapter" href="#ch2">02 — לופ ה-Vibe</a>
+  <a class="nav-item" href="#ch2-1">תהליך עבודה ב-5 שלבים</a>
+  <a class="nav-item" href="#ch2-2">מקרה בוחן: ניתוח לוגים</a>
+  <a class="nav-item" href="#ch2-3">מקרה בוחן: השוואת ריצות</a>
+  <hr class="nav-divider"/>
+
+  <a class="nav-item chapter" href="#ch3">03 — ארכיטקטורת ריבוי סוכנים</a>
+  <a class="nav-item" href="#ch3-1">מגבלות של סוכן יחיד</a>
+  <a class="nav-item" href="#ch3-2">עיצוב Pipeline סוכנים</a>
+  <a class="nav-item" href="#ch3-3">תבניות ארכיטקטורה</a>
+  <hr class="nav-divider"/>
+
+  <a class="nav-item chapter" href="#ch4">04 — מיומנויות (Skills)</a>
+  <a class="nav-item" href="#ch4-1">מהי מיומנות</a>
+  <a class="nav-item" href="#ch4-4">מלכודת "עודף המיומנויות"</a>
+  <a class="nav-item" href="#ch4-5">פרקטיקות מומלצות</a>
+  <hr class="nav-divider"/>
+
+  <a class="nav-item chapter" href="#ch5">05 — כלים (Tools)</a>
+  <a class="nav-item" href="#ch5-2">ביצוע ≠ הסקה</a>
+  <a class="nav-item" href="#ch5-3">סוגי כלים</a>
+  <hr class="nav-divider"/>
+
+  <a class="nav-item chapter" href="#ch6">06 — זיכרון של סוכנים</a>
+  <a class="nav-item" href="#ch6-2">סוגי קבצי Markdown</a>
+  <a class="nav-item" href="#ch6-4">תבנית סוכן בעל מצב (Stateful)</a>
+  <hr class="nav-divider"/>
+
+  <a class="nav-item chapter" href="#ch7">07 — וולידציה (Validation)</a>
+  <a class="nav-item" href="#ch7-3">ארבע רמות וולידציה</a>
+  <hr class="nav-divider"/>
+
+  <a class="nav-item chapter" href="#ch8">08 — הגדרת סביבת עבודה</a>
+  <hr class="nav-divider"/>
+
+  <a class="nav-item chapter" href="#ch9">09 — הנדסת פרומפטים</a>
+  <a class="nav-item" href="#ch9-2">תבנית חקירה</a>
+  <a class="nav-item" href="#ch9-3">תבנית השוואה</a>
+  <a class="nav-item" href="#ch9-4">תבנית כתיבת קוד</a>
+  <a class="nav-item" href="#ch9-5">תבנית מניעת הזיות</a>
+  <a class="nav-item" href="#ch9-6">סוכן ברווז הגומי</a>
+  <hr class="nav-divider"/>
+
+  <a class="nav-item chapter" href="#ch10">10 — ניהול קונטקסט</a>
+  <hr class="nav-divider"/>
+
+  <a class="nav-item chapter" href="#ch11">11 — הערכה (Evaluation)</a>
+  <hr class="nav-divider"/>
+
+  <a class="nav-item chapter" href="#ch12">12 — ה-Pipeline המלא</a>
+  <hr class="nav-divider"/>
+
+  <a class="nav-item chapter" href="#ch13">13 — מה הלאה</a>
+  <hr class="nav-divider"/>
+
+  <a class="nav-item chapter" href="#summary">סיכום מנהלים</a>
+</nav>
+
+<!-- ═══ MAIN ══════════════════════════════════════════════════════════ -->
+<main>
+
+  <!-- HERO -->
+  <section id="hero">
+    <div class="hero">
+      <div class="hero-eyebrow">NL Practical AI — מדריך למשתמש</div>
+      <h1>תכנות אג'נטי ו-<span>Vibe Coding</span><br/>עם סוכני AI</h1>
+      <p>מדריך מקיף ומעשי לעבודה אפקטיבית עם סוכני תכנות — מהנדסת פרומפטים ועיצוב מיומנויות ועד ל-Pipelines של ריבוי סוכנים, וולידציה ואוטומציה ארוכת טווח של תהליכי עבודה.</p>
+      <div class="hero-meta">
+        <div class="hero-meta-item">
+          <span class="label">קהל יעד</span>
+          <span class="value">מהנדסים ומדעני נתונים</span>
+        </div>
+        <div class="hero-meta-item">
+          <span class="label">רמה</span>
+          <span class="value">מקצועי / מעשי</span>
+        </div>
+        <div class="hero-meta-item">
+          <span class="label">פרקים</span>
+          <span class="value">13</span>
+        </div>
+        <div class="hero-meta-item">
+          <span class="label">מהדורה</span>
+          <span class="value">1.0 — 2026</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════ CHAPTER 1 ══════════════════════════════════════════════════ -->
+  <section id="ch1">
+    <div class="chapter-header">
+      <div class="chapter-num">פרק 01</div>
+      <h2 class="chapter-title">המודל המנטלי — איך לחשוב על סוכנים</h2>
+    </div>
+
+    <section id="ch1-1">
+      <h3>1.1 אתם הדרג הבכיר — הסוכן הוא הג'וניור המוכשר</h3>
+      <p>הדרך הנכונה לחשוב על מערכת היחסים שלכם עם Copilot, Claude Code או כל סוכן תכנות אחר היא כעבודה עם עוזר מוכשר מאוד שיש לו גישה לכלים — אך חסר לו שיקול דעת הנדסי עצמאי. אתם מגדירים את הבעיה, את האילוצים ואת מה שנחשב ל"נכון". הסוכן מציע פתרונות, כותב קוד ראשוני, חוקר לוגים ובסיסי קוד, ומספק לכם חומר גלם לעיבוד ולוולידציה.</p>
+
+      <div class="insight">
+        <div class="insight-label">עיקרון מפתח</div>
+        <p>מהנדסים בארגונים מובילים שומרים את החלטות העיצוב ושיקולי הדעת המורכבים לעצמם, ומאצילים את "העבודה שמסביב לעבודה" לסוכנים.</p>
+      </div>
+
+      <p>חלוקת עבודה זו אינה נובעת מתקרת היכולת של הסוכן — היא נוגעת לאחריות הנדסית. הסוכן עשוי להיות מהיר ורהוט בצורה מרשימה, אך הוא אינו מבין את ההקשר הארגוני, פשרות לטווח ארוך או השלכות רוחביות. האחריות הזו נשארת אצלכם.</p>
+    </section>
+
+    <section id="ch1-2">
+      <h3>1.2 שלוש מגמות בתעשייה בתכנות אג'נטי</h3>
+      <p>מחקר על האופן שבו מהנדסים בארגונים בעלי ביצועים גבוהים משתמשים בסוכני תכנות זיהה שלוש תבניות עקביות:</p>
+
+      <div class="steps">
+        <div class="step">
+          <div class="step-num"></div>
+          <div class="step-body">
+            <h4>מגמת "העבודה שמסביב לעבודה"</h4>
+            <p>רוב המשימות המבוצעות בעזרת סוכנים אינן פיתוח ליבה של המוצר. הן כוללות ניתוח לוגים, הפקת דוחות, השוואת ריצות, סקריפטים קטנים — מה שנקרא לעיתים "עבודת דבק" (Glue work) או "מטא-עבודה". כאן הסוכנים מספקים את הערך הגבוה ביותר, כיוון שמשימות אלו היו נשארות ידניות או פשוט לא היו מתבצעות לולא הסוכן.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num"></div>
+          <div class="step-body">
+            <h4>מהנדסים שומרים את החלטות העיצוב</h4>
+            <p>כאשר משימה דורשת חשיבה ארכיטקטונית, הבנת פשרות מורכבות או החלטות המשפיעות על מבנה המערכת — מהנדסים מעדיפים לבצע זאת בעצמם. הסוכן הוא כלי ביצועי, לא כלי לקבלת החלטות.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num"></div>
+          <div class="step-body">
+            <h4>אוטומציה של עבודה שהייתה ידנית בעבר</h4>
+            <p>תהליכים שהיו ידניים לחלוטין — למשל, אנשים שאינם מהנדסים הבונים לעצמם כלי עבודה — עוברים כעת אוטומציה כיוון שסוכנים מורידים את חסם הכניסה. אנשים ללא רקע הנדסי עמוק יכולים לבנות דברים שבעבר דרשו מפתח.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="ch1-3">
+      <h3>1.3 במה סוכנים מצטיינים — ואיפה הם נכשלים</h3>
+      <div class="cap-grid">
+        <div class="cap-card good">
+          <h4 class="good-label">סוכנים מצטיינים ב:</h4>
+          <ul>
+            <li>ניתוח לוגים ונתונים מורכבים — סריקת אלפי שורות לזיהוי תבניות</li>
+            <li>הפקת סיכומים, דוחות והשוואות מובנות</li>
+            <li>חקירה והסבר של בסיסי קוד לא מוכרים</li>
+            <li>כתיבת Boilerplate, טסטים וקוד "דבק"</li>
+            <li>דיבאגינג ראשוני — העלאת השערות לגבי גורמי שורש</li>
+          </ul>
+        </div>
+        <div class="cap-card caution">
+          <h4 class="caution-label">סוכנים מתקשים ב:</h4>
+          <ul>
+            <li>החלטות עיצוב וארכיטקטורה — חוסר בהקשר עסקי ומודעות לטווח ארוך</li>
+            <li>מקרי קצה קריטיים שרק מומחי דומיין יזהו</li>
+            <li>לוגיקה שלא ניתן לאמת במהירות — סיכון גבוה ללא וולידציה</li>
+            <li>כל דבר הדורש שיקול דעת ארגוני או התחשבות בבעלי עניין</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+  </section>
+
+  <!-- ════ CHAPTER 2 ══════════════════════════════════════════════════ -->
+  <section id="ch2">
+    <div class="chapter-header">
+      <div class="chapter-num">פרק 02</div>
+      <h2 class="chapter-title">תהליך העבודה הבסיסי — לופ ה-Vibe</h2>
+    </div>
+
+    <section id="ch2-1">
+      <h3>2.1 הלופ בעל חמשת השלבים</h3>
+      <p>כל אינטראקציה יצרנית עם סוכן — בין אם אתם מדעני נתונים או מהנדסי Backend — עוקבת אחר אותו הלופ:</p>
+
+      <div class="pipeline">
+        <div class="pipe-step active">
+          <div class="pipe-num">1</div>
+          <div class="pipe-label">הגדרה</div>
+          <div class="pipe-sublabel">מיקוד המשימה</div>
+        </div>
+        <div class="pipe-step">
+          <div class="pipe-num">2</div>
+          <div class="pipe-label">חקירה</div>
+          <div class="pipe-sublabel">לתת לסוכן לעבוד</div>
+        </div>
+        <div class="pipe-step">
+          <div class="pipe-num">3</div>
+          <div class="pipe-label">אימות</div>
+          <div class="pipe-sublabel">וולידציה של הפלט</div>
+        </div>
+        <div class="pipe-step">
+          <div class="pipe-num">4</div>
+          <div class="pipe-label">זיקוק</div>
+          <div class="pipe-sublabel">פידבק איטרטיבי</div>
+        </div>
+        <div class="pipe-step">
+          <div class="pipe-num">5</div>
+          <div class="pipe-label">אוטומציה</div>
+          <div class="pipe-sublabel">חזרה ← סקריפט</div>
+        </div>
+      </div>
+
+      <h4>שלב 1 — הגדרה</h4>
+      <p>זהו השלב החשוב ביותר. ככל שהגדרת המשימה תהיה צרה וספציפית יותר, כך הפלט יהיה טוב יותר. במקום לכתוב <code>נתח את הלוגים</code>, כתבו:</p>
+      <pre><code>Parse the routing failure log. Focus on congestion metrics in
+layers M5–M7, and list the top 3 possible root causes with
+evidence from the log.</code></pre>
+      <p>פרומפט מעורפל מאלץ את הסוכן לנחש את כוונתכם. פרומפט מדויק גורם לו לעבוד ביעילות.</p>
+
+      <h4>שלב 2 — חקירה</h4>
+      <p>תנו לסוכן לעבוד ללא הפרעות. תנו לו מרחב לחפש, לנתח, להציע ולהסביר. התנגדו לדחף לתקן אותו תוך כדי תנועה — חכו לטיוטה הראשונה לפני שתכוונו אותו.</p>
+
+      <h4>שלב 3 — אימות (Validation)</h4>
+      <p>זה השלב שמפריד בין שימוש מקצועי לחובבני. הריצו את הקוד שנוצר, בדקו מקרי קצה, השוו להתנהגות צפויה והפעילו בדיקות דטרמיניסטיות. סוכנים לעיתים ממציאים לוגיקה שנשמעת סבירה — וולידציה היא חובה.</p>
+
+      <h4>שלב 4 — זיקוק</h4>
+      <p>לאחר האימות, חזרו לסוכן עם פידבק מובנה: <em>"אילו הנחות הנחת?"</em>, <em>"טפל במקרה קצה X"</em>, <em>"שפר ביצועים."</em> כל איטרציה מקרבת את הפלט לאיכות של סביבת ייצור (Production).</p>
+
+      <h4>שלב 5 — אוטומציה</h4>
+      <p>אם ביצעתם את אותו תהליך עבודה פעמיים, המירו אותו לסקריפט, למיומנות (Skill) או ל-Pipeline אוטומטי. הלופ הזה מצטבר לאורך זמן.</p>
+    </section>
+
+    <section id="ch2-2">
+      <h3>2.2 דוגמה — חקירת כשל במערכת באמצעות ניתוח לוגים</h3>
+      <p>חשבו על תרחיש שבו ריצת Backend נכשלת עקב בעיית ניתוב (Routing). על ידי פתיחת סביבת העבודה המלאה ב-IDE — מתן גישה לסוכן לכל הקבצים, הלוגים והדוחות — במקום להדביק רק קטעים נבחרים, הסוכן יכול לחקור ולהצליב מידע באופן עצמאי.</p>
+      <p>הדבקת הלוגים הרלוונטיים מפיקה ניתוח של הסוכן המזהה עומס קיצוני, צפיפות גבוהה ואנומליות של חסימה. באופן ספציפי, הסוכן מזהה ששטח החסימה חורג מגודל הליבה — אינדיקציה חזקה לשגיאת Floorplan — וממליץ על דוחות ממוקדים לאישור. במקרה זה, זה היה בדיוק גורם השורש.</p>
+
+      <div class="insight">
+        <div class="insight-label">הערך שהתקבל</div>
+        <p>מהנדס ג'וניור איבחן כשל מורכב באופן עצמאי, ללא המתנה למומחה דומיין — מה שחסך שעות של חקירה וביטל צוואר בקבוק.</p>
+      </div>
+    </section>
+
+    <section id="ch2-3">
+      <h3>2.3 דוגמה — השוואה אוטומטית של ריצות ניסוי</h3>
+      <p>בעת השוואת מספר ריצות ניסוי, סוכן יכול לנתח אוטומטית מטריקות, להפיק דוחות HTML עם גרפים וטבלאות, להשוות ריצות זו לצד זו ולסמן האם סביבת ההשוואה תקינה (אותו בסיס הגדרות, ללא "סחיפה" סביבתית). לאחר מכן הוא מפיק המלצות מעשיות: איזו קונפיגורציה הראתה את השיפור המשמעותי ביותר, אילו הפרות דורשות חקירה ואילו ניסויים כדאי להריץ בהמשך.</p>
+      <p>זה מחליף השוואה ידנית ב-Excel שהייתה לוקחת שעות — ומפיק פלט עשיר וניתן לשחזור בצורה טובה יותר.</p>
+    </section>
+  </section>
+
+  <!-- ════ CHAPTER 3 ══════════════════════════════════════════════════ -->
+  <section id="ch3">
+    <div class="chapter-header">
+      <div class="chapter-num">פרק 03</div>
+      <h2 class="chapter-title">ארכיטקטורת ריבוי סוכנים</h2>
+    </div>
+
+    <section id="ch3-1">
+      <h3>3.1 הבעיה עם סוכן יחיד במשימה ארוכה</h3>
+      <p>הקצאת סוכן יחיד למשימה גדולה ומורכבת יוצרת שני סוגי כשלים. ראשית, הסוכן "מתעייף" — איכות הפלט יורדת לאורך זמן כשהוא מתחיל לדלג על פרטים או לתת תשובות רדודות. שנית, חלון הקונטקסט (Context Window) מתמלא והתוכן נדחס אוטומטית — והסוכן אינו מודע לכך שזה קרה. הוא ממשיך לעבוד כאילו דבר לא אבד.</p>
+
+      <div class="callout danger">
+        <p>דחיסת קונטקסט היא אירוע שקט. הסוכן לא יודע שהוא איבד מידע. הוא ממשיך בביטחון עצמי מופרז, ולעיתים קרובות מפיק פלטים הסותרים ניתוחים קודמים שלו.</p>
+      </div>
+
+      <p>זהו אינו באג — זוהי תכונה בסיסית של אופן הפעולה של מודלי שפה גדולים (LLMs). תכננו את תהליכי העבודה שלכם בהתאם.</p>
+    </section>
+
+    <section id="ch3-2">
+      <h3>3.2 הפתרון — Pipeline של סוכנים עם תפקידים מוגדרים</h3>
+      <p>במקום שסוכן אחד יעשה הכל, בנו Pipeline של סוכנים, כשכל אחד מהם אחראי על שלב אחד. דוגמה ל-Pipeline של שלושה סוכנים לניתוח טכני מורכב:</p>
+
+      <div class="pipeline">
+        <div class="pipe-step">
+          <div class="pipe-num">A1</div>
+          <div class="pipe-label">ניתוח קוד</div>
+          <div class="pipe-sublabel">הבנת זרימת לוגיקה וכיסוי</div>
+        </div>
+        <div class="pipe-step active">
+          <div class="pipe-num">A2</div>
+          <div class="pipe-label">ניתוח סביבה</div>
+          <div class="pipe-sublabel">אילוצים וקונפיגורציות רלוונטיות</div>
+        </div>
+        <div class="pipe-step">
+          <div class="pipe-num">A3</div>
+          <div class="pipe-label">מציאת טריגרים</div>
+          <div class="pipe-sublabel">זיהוי הגדרות הגורמות לכשל</div>
+        </div>
+      </div>
+
+      <p>כל סוכן מקבל רק את הקונטקסט לו הוא זקוק — ולא יותר — ומעביר את מסקנותיו לסוכן הבא. זה שומר על כל משימה אינדיבידואלית קצרה, ממוקדת ואיכותית.</p>
+    </section>
+
+    <section id="ch3-3">
+      <h3>3.3 מדוע ריבוי סוכנים עובד</h3>
+      <div class="cap-grid">
+        <div class="cap-card good">
+          <h4>יתרונות</h4>
+          <ul>
+            <li><strong>בידוד קונטקסט</strong> — כל סוכן רואה רק מה שהוא צריך, מה שמפחית הזיות (Hallucinations)</li>
+            <li><strong>שחיזוריּות (Reproducibility)</strong> — ניתן להריץ מחדש כל שלב באופן עצמאי</li>
+            <li><strong>יכולת בקרה</strong> — ניתן לאמת את הפלט של כל סוכן לפני שממשיכים הלאה</li>
+            <li><strong>שימור איכות</strong> — כל סוכן מטפל במשימה קצרה וממוקדת</li>
+          </ul>
+        </div>
+        <div class="cap-card caution">
+          <h4>פשרות (Trade-offs)</h4>
+          <ul>
+            <li>יותר עבודת עיצוב מראש</li>
+            <li>תקורה של תקשורת בין סוכנים</li>
+            <li>קשה יותר לדבג כשלים חוצי-סוכנים</li>
+          </ul>
+        </div>
+      </div>
+
+      <h3>3.4 תבניות ארכיטקטורה</h3>
+      <div class="arch-grid">
+        <div class="arch-card">
+          <h4>אורקסטרטור + סוכני משנה <span class="arch-badge">תבנית A</span></h4>
+          <p>סוכן אורקסטרטור ראשי יוצר ומכוון סוכני משנה מתמחים.</p>
+          <div class="arch-pro">אוטומציה גבוהה, נוח למשתמש</div>
+          <div class="arch-con">שכבות אבסטרקציה נוספות מפחיתות דיוק</div>
+          <div class="arch-con">סוכני משנה עלולים לחרוג ממגבלות קריאה לכלים</div>
+        </div>
+        <div class="arch-card">
+          <h4>מיומנויות פרוצדורליות <span class="arch-badge">תבנית B</span></h4>
+          <p>כל מיומנות מקודדת רצף פעולות שלם. המשתמש יכול לכוון אינטראקטיבית תוך כדי הביצוע.</p>
+          <div class="arch-pro">דינמי ואינטראקטיבי</div>
+          <div class="arch-pro">המשתמש יכול להנחות בכל שלב</div>
+          <div class="arch-con">פחות מתאים לאוטומציה מלאה</div>
+        </div>
+        <div class="arch-card">
+          <h4>מיומנויות אטומיות <span class="arch-badge">תבנית C</span></h4>
+          <p>כל מיומנות מבצעת בדיוק פעולה אחת. מקסימום גרנולריות ויכולת הרכבה מחדש.</p>
+          <div class="arch-pro">גמישות מקסימלית</div>
+          <div class="arch-con">נטל קונטקסט כבד</div>
+          <div class="arch-con">הסוכן חייב לבחור פעולה בכל שלב</div>
+        </div>
+      </div>
+    </section>
+  </section>
+
+  <!-- ════ CHAPTER 4 ══════════════════════════════════════════════════ -->
+  <section id="ch4">
+    <div class="chapter-header">
+      <div class="chapter-num">פרק 04</div>
+      <h2 class="chapter-title">מיומנויות (Skills) — מתי ואיך להשתמש בהן</h2>
+    </div>
+
+    <section id="ch4-1">
+      <h3>4.1 מהי מיומנות (Skill)</h3>
+      <p>מיומנות היא יכולת מוגדרת מראש שהסוכן יכול להפעיל. במקום לכתוב פרומפט ארוך בכל פעם שאתם רוצים פעולה ספציפית, אתם מגדירים מיומנות שעוטפת את הפעולה הזו — כולל הפרומפט, הכלים הנדרשים ופורמט הפלט הצפוי. חשבו על זה כעל פונקציה שאתם כותבים פעם אחת וקוראים לה שוב ושוב.</p>
+
+      <p>ספריית מיומנויות טיפוסית עשויה לכלול: חקירת כיסוי, ניתוח קוד, בדיקת תקינות, חיפוש באגים, ניתוח סביבה ומציאת טריגרים. כל מיומנות מבצעת פעולה ממוקדת אחת ומחזירה תוצאה מובנית.</p>
+    </section>
+
+    <h3>4.2 מתי להשתמש במיומנויות</h3>
+    <div class="chips">
+      <span class="chip">פעולות חוזרות (פעמיים ומעלה)</span>
+      <span class="chip">דרישה לפורמט פלט עקבי</span>
+      <span class="chip">שלב מוגדר בתוך Pipeline</span>
+    </div>
+    <p>אם אתם מוצאים את עצמכם כותבים את אותו הפרומפט (או דומה לו מאוד) יותר מפעמיים, זהו סימן להפוך אותו למיומנות. מיומנויות גם אוכפות עקביות בפלט — הסוכן לא יאלתר את המבנה בכל פעם מחדש.</p>
+
+    <h3>4.3 מתי לא להשתמש במיומנויות</h3>
+    <p><strong>משימות חד-פעמיות:</strong> אם המשימה לא תחזור על עצמה, אל תשקיעו זמן בהגדרת מיומנות. השתמשו בפרומפט רגיל.</p>
+    <p><strong>עבודת חקירה ראשונית:</strong> כשאתם עדיין לא יודעים מה אתם מחפשים — חקירת סוג באג חדש ולא מוכר — עבדו בצורה אינטראקטיבית. מיומנויות נועדו למשימות שכבר התגבשו לתבנית שניתן לחזור עליה.</p>
+
+    <section id="ch4-4">
+      <h3>4.4 מלכודת קריטית — עודף מיומנויות יוצר בלבול</h3>
+
+      <div class="callout danger">
+        <p>הסוכן בוחר מיומנויות רק על סמך <strong>השם והתיאור</strong> שלהן — הוא אינו יכול לראות את תוכן המיומנות בעת הבחירה. עם יותר מ-100 מיומנויות שנשמעות דומה, הוא יבחר לעיתים קרובות את המיומנות הלא נכונה.</p>
+      </div>
+
+      <p>מחקרים מאשרים זאת: ככל שמספר המיומנויות הזמינות גדל, דיוק הבחירה יורד — במיוחד כשיש חפיפה סמנטית ביניהן. ספרייה מתוחזקת היטב של 10–20 מיומנויות מציגה ביצועים טובים יותר באופן עקבי מאשר אוסף מפוזר של למעלה מ-100.</p>
+      <p>הסוכן רואה רק את המזהה והתיאור של המיומנות בעת הבחירה. אם יש לכם מיומנויות עם תיאורים דומים, הסוכן ינחש — וינחש לא נכון. כל מיומנות חייבת להיות <strong>ניתנת להבחנה סמנטית</strong> מכל מיומנות אחרת ברמת התיאור.</p>
+    </section>
+
+    <section id="ch4-5">
+      <h3>4.5 פרקטיקות מומלצות למיומנויות</h3>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>פרקטיקה</th><th>דוגמה רעה</th><th>דוגמה טובה</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>מתן שמות מדויקים</td>
+              <td><code>analyze</code></td>
+              <td><code>analyze_routing_congestion_metrics</code></td>
+            </tr>
+            <tr>
+              <td>טווח פעולה (Scope) צר</td>
+              <td><code>check_logs</code></td>
+              <td><code>extract_blockage_violations_from_routing_log</code></td>
+            </tr>
+            <tr>
+              <td>הגבלת כמות</td>
+              <td>100+ מיומנויות ברשימה שטוחה</td>
+              <td>10–20 מיומנויות עם היררכיה ברורה</td>
+            </tr>
+            <tr>
+              <td>תיאור ייחודי</td>
+              <td>"מנתח נתונים ומוצא בעיות"</td>
+              <td>"מנתח לוג ניתוב ומפיק מטריקות עומס לכל שכבת מתכת"</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </section>
+
+  <!-- ════ CHAPTER 5 ══════════════════════════════════════════════════ -->
+  <section id="ch5">
+    <div class="chapter-header">
+      <div class="chapter-num">פרק 05</div>
+      <h2 class="chapter-title">כלים (Tools) — יכולות ביצוע</h2>
+    </div>
+
+    <h3>5.1 מהם כלים (בהקשר של סוכנים)</h3>
+    <p>כלים הם יכולות ביצוע שהסוכן יכול להפעיל: חיפוש קבצים, הרצת פקודות Shell, ביצוע קוד Python, קריאה ל-APIs, שאילתות למסדי נתונים. זה מה שהופך LLM מ"צ'אטבוט חכם" לסוכן שבאמת <em>עושה</em> דברים. ללא כלים, הסוכן יכול רק לדבר. עם כלים, הוא יכול לחפש, להריץ, לנתח וליצור.</p>
+
+    <section id="ch5-2">
+      <h3>5.2 הכלל המרכזי — ביצוע ≠ הסקה</h3>
+      <p>אחת הטעויות הנפוצות היא לבקש מה-LLM "לחשוב" על דברים הדורשים חישוב מדויק. אם אתם צריכים לספור שורות בלוג, לחשב ממוצע של מטריקות או להשוות מספרים — אל תבקשו מהסוכן לנחש את התשובה. בקשו ממנו <strong>להריץ קוד</strong> שיחשב זאת.</p>
+
+      <div class="insight">
+        <div class="insight-label">עיקרון ליבה</div>
+        <p>משימה דטרמיניסטית (תשובה נכונה אחת) ← השתמשו בכלי (Tool). משימת שיקול דעת (פרשנות, הסבר, דירוג) ← השתמשו בהסקה של ה-LLM. לעולם אל תערבבו ביניהם.</p>
+      </div>
+    </section>
+
+    <section id="ch5-3">
+      <h3>5.3 סוגי כלים ומתי להשתמש בכל אחד</h3>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>סוג הכלי</th><th>שימוש עיקרי</th><th>מתי זה חיוני</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span class="td-badge">חיפוש קבצים / Repo</span></td>
+              <td>חקירת קוד, מיפוי מודולים, מציאת פונקציות</td>
+              <td>כניסה לבסיס קוד לא מוכר</td>
+            </tr>
+            <tr>
+              <td><span class="td-badge">ביצוע קוד</span></td>
+              <td>ניתוח נתונים, חישובים מספריים, הפקת גרפים</td>
+              <td>כל משימה הדורשת תשובה מדויקת וניתנת לשחזור</td>
+            </tr>
+            <tr>
+              <td><span class="td-badge">חיפוש בטקסט / לוגים</span></td>
+              <td>סינון תבניות, התנהגות דמוית grep, סריקת קבצים גדולים</td>
+              <td>מציאת סיגנלים בתוך פלט בנפח גבוה</td>
+            </tr>
+            <tr>
+              <td><span class="td-badge">מערכת / CLI</span></td>
+              <td>הרצת טסטים, פקודות Build, סקריפטים של Deployment</td>
+              <td>Pipelines של אוטומציה מקצה לקצה</td>
+            </tr>
+            <tr>
+              <td><span class="td-badge">APIs חיצוניים (MCP)</span></td>
+              <td>גישה לנתונים חיים, מסדי נתונים של רגרסיות, מערכות ניהול באגים</td>
+              <td>שליפת נתונים ביוזמת הסוכן ללא הדבקה ידנית</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <h3>5.4 מלכודות בשימוש בכלים</h3>
+    <p><strong>גישה לא מוגבלת לכלים:</strong> ללא הגבלות ברורות, סוכנים מריצים פעולות לא רלוונטיות או מבזבזים זמן. הגדירו תמיד מה מותר ומה אסור לסוכן לעשות.</p>
+    <p><strong>ה-LLM מחשב במקום לבצע:</strong> לעולם אל תבקשו מהסוכן "לחשב" — בקשו ממנו "להריץ קוד שמחשב". ההבדל קריטי לדיוק.</p>
+    <p><strong>ערבוב בין הסקה לביצוע:</strong> ה-LLM מחליט <em>מה</em> לעשות. הכלי <em>מבצע</em> זאת בדיוק. שילוב התפקידים הללו יוצר תוצאות לא אמינות.</p>
+  </section>
+
+  <!-- ════ CHAPTER 6 ══════════════════════════════════════════════════ -->
+  <section id="ch6">
+    <div class="chapter-header">
+      <div class="chapter-num">פרק 06</div>
+      <h2 class="chapter-title">קבצי Markdown — הזיכרון החיצוני של הסוכן</h2>
+    </div>
+
+    <h3>6.1 מדוע זה קריטי</h3>
+    <p>סוכנים אינם זוכרים דבר בין סשנים שונים. כל שיחה חדשה מתחילה מאפס — לסוכן אין מושג על מה עבדתם אתמול, מה היו המסקנות מהניסוי האחרון או אילו החלטות כבר התקבלו. ואפילו בתוך סשן אחד, דחיסת קונטקסט מוחקת מידע בשקט תוך כדי עבודה.</p>
+    <p>הפתרון: קבצי Markdown ששומרים את ה"זיכרון" שלכם מחוץ לסוכן. כתבו אותם בסוף כל סשן, וטענו אותם בתחילת הסשן הבא. זה הופך את הסוכן משיחה חד-פעמית לעוזר מתמשך עם קונטקסט מצטבר.</p>
+
+    <section id="ch6-2">
+      <h3>6.2 סוגי קבצי Markdown מומלצים</h3>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>קובץ</th><th>תוכן</th><th>תדירות עדכון</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>project_context.md</code></td>
+              <td>תיאור פרויקט, אילוצים, ארכיטקטורה, כלים, מטריקות מפתח</td>
+              <td>לעיתים נדירות — קונטקסט בסיסי</td>
+            </tr>
+            <tr>
+              <td><code>debug_notes.md</code></td>
+              <td>באגים שנמצאו, תבניות שזוהו, לקחים שנלמדו</td>
+              <td>בכל סשן עם ממצאים חדשים</td>
+            </tr>
+            <tr>
+              <td><code>experiments.md</code></td>
+              <td>לוג ריצות — פרמטרים, תוצאות, מסקנות</td>
+              <td>בכל ריצת ניסוי</td>
+            </tr>
+            <tr>
+              <td><code>decisions.md</code></td>
+              <td>מדוע נבחרה גישה א' על פני ב', פשרות, אישורים</td>
+              <td>בכל החלטה ארכיטקטונית</td>
+            </tr>
+            <tr>
+              <td><code>session_summary.md</code></td>
+              <td>מה בוצע, ממצאים, החלטות, צעדים הבאים</td>
+              <td>בסוף כל סשן</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <h3>6.3 שילוב בתהליך העבודה</h3>
+
+    <h4>תחילת סשן — טעינת קונטקסט</h4>
+    <pre><code>Please read these files for context:
+- project_context.md
+- session_summary.md
+- experiments.md
+
+Continue the analysis from where we left off.</code></pre>
+
+    <h4>סיום סשן — שמירת מצב</h4>
+    <pre><code>Summarize today's session in Markdown format for session_summary.md.
+Include:
+- Key findings
+- Decisions made and rationale
+- Open questions
+- Next steps</code></pre>
+
+    <h4>קלט לניתוח — Markdown כמידע</h4>
+    <pre><code>Based on experiments.md, which hyperparameter combination showed
+the best convergence? Suggest the next 3 experiments to run,
+building on what has already been tried.</code></pre>
+
+    <section id="ch6-4">
+      <h3>6.4 תבנית מתקדמת — סוכן בעל מצב (Stateful) באמצעות Markdown</h3>
+      <p>התייחסו לקבצי ה-Markdown כאל <em>אובייקט המצב</em> (State object) של הסוכן. בכל סשן: טוענים מצב ← עובדים ← כותבים מצב מעודכן. זה מדמה סוכן שרץ לאורך זמן עם זיכרון עקבי, למרות שכל סשן הוא טכנית חדש לגמרי.</p>
+      <pre><code>Session Input:
+  ├── current_task/  (logs, code, data)
+  ├── session_summary.md  (what we know)
+  └── experiments.md  (what we've tried)
+
+→ Agent works with full continuity
+
+Session Output:
+  ├── Updated session_summary.md
+  └── Updated experiments.md<span class="label">PATTERN</span></code></pre>
+    </section>
+  </section>
+
+  <!-- ════ CHAPTER 7 ══════════════════════════════════════════════════ -->
+  <section id="ch7">
+    <div class="chapter-header">
+      <div class="chapter-num">פרק 07</div>
+      <h2 class="chapter-title">וולידציה (Validation) — מדוע וכיצד</h2>
+    </div>
+
+    <h3>7.1 הבעיה — ביטחון עצמי כוזב</h3>
+    <p>זוהי אולי הנקודה החשובה ביותר במדריך כולו. סוכנים לעיתים ממציאים לוגיקה או הסברים שנשמעים נכונים אך אינם מבוססים על המציאות — במיוחד כשאין מומחה דומיין זמין באופן מיידי לבדיקה מצליבה.</p>
+
+    <div class="callout danger">
+      <p>הסוכן לא אומר "אני לא בטוח". הוא מציג את תשובתו בביטחון מלא — גם כשהוא טועה. זה יוצר <em>אשליה של נכונות</em> שעלולה להוביל להחלטות הנדסיות יקרות המבוססות על הנחות שגויות.</p>
+    </div>
+
+    <h3>7.2 הגישה ההיברידית</h3>
+    <p>אסטרטגיית הוולידציה היעילה ביותר משלבת קוד דטרמיניסטי (המפיק דוחות מדויקים ובודק את תקינות הסביבה) עם ניתוח של הסוכן (המספק תובנות והסברים). השכבה הדטרמיניסטית משמשת כעוגן — אם הפלט של הסוכן סותר את מה שהכלים המסורתיים מראים, אתם יודעים שיש לחקור זאת לעומק.</p>
+
+    <section id="ch7-3">
+      <h3>7.3 ארבע רמות וולידציה</h3>
+      <div class="validation-levels">
+        <div class="val-level">
+          <div class="val-num">1</div>
+          <div class="val-name">תקינות (Sanity)</div>
+          <div class="val-desc">האם זה רץ? אין קריסה? הפלט נראה סביר? לוקח שניות, תופס שגיאות גסות.</div>
+        </div>
+        <div class="val-level">
+          <div class="val-num">2</div>
+          <div class="val-name">נכונות</div>
+          <div class="val-desc">הרצה מול נתונים ידועים, השוואה לפלט צפוי. דורש "אמת בסיסית" (Ground truth).</div>
+        </div>
+        <div class="val-level">
+          <div class="val-num">3</div>
+          <div class="val-name">מקרי קצה</div>
+          <div class="val-desc">ערכי Null, מספרים שליליים, מחרוזות ריקות, ערכי גבול. סוכנים מדלגים על אלו הכי הרבה.</div>
+        </div>
+        <div class="val-level">
+          <div class="val-num">4</div>
+          <div class="val-name">סביבת ייצור</div>
+          <div class="val-desc">ביצועים ב-Scale, מצבי כשל, Race conditions, חוסר זמינות של API.</div>
+        </div>
+      </div>
+    </section>
+
+    <h3>7.4 כלל הזהב</h3>
+    <div class="golden-rule">
+      <code>If you cannot verify the output → do not trust it.</code>
+      <p>הסוכן מהיר. אתם מדויקים. השילוב הזה עובד רק אם שלב הוולידציה אינו נזנח לעולם.</p>
+    </div>
+  </section>
+
+  <!-- ════ CHAPTER 8 ══════════════════════════════════════════════════ -->
+  <section id="ch8">
+    <div class="chapter-header">
+      <div class="chapter-num">פרק 08</div>
+      <h2 class="chapter-title">סביבת עבודה — הגדרות שעושות את ההבדל</h2>
+    </div>
+
+    <h3>8.1 מדוע גישה מלאה לסביבת העבודה היא קריטית</h3>
+    <p>פתיחת סביבת העבודה המלאה ב-IDE — כך שלסוכן יש גישה לכל הקבצים, הלוגים, ההגדרות והדוחות — משנה מהיסוד את איכות הניתוח. כשהסוכן רואה רק קטע קוד מודבק, הוא עובד עם מידע חלקי. כשהוא רואה את כל סביבת העבודה, הוא יכול לחקור באופן עצמאי, להצליב קבצים ולהציף תובנות עמוקות יותר.</p>
+    <p>זהו לעיתים קרובות ה"מפתח" המשמעותי ביותר הזמין לצוותים שמרגישים שהם לא מנצלים מספיק את הסוכנים.</p>
+
+    <h3>8.2 הגדרה מומלצת</h3>
+    <ul style="padding-right: 20px; margin-bottom: 16px;">
+      <li style="margin-bottom: 8px;"><strong>IDE עם Copilot</strong> מותקן על מכונת הפיתוח או הניסויים שלכם — כולל חיבורי SSH מרחוק</li>
+      <li style="margin-bottom: 8px;"><strong>כל הלוגים, ההגדרות והסקריפטים נגישים</strong> בתוך סביבת העבודה — לא רק קוד המקור</li>
+      <li style="margin-bottom: 8px;"><strong>סוכן CLI</strong> (כמו Claude Code) למשימות הדורשות הרצת פקודות או Pipelines ארוכים</li>
+      <li style="margin-bottom: 8px;"><strong>קבצי זיכרון ב-Markdown</strong> בשורש ה-Repository (כפי שתואר בפרק 6)</li>
+    </ul>
+
+    <h3>8.3 מצבי עבודה</h3>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>מצב</th><th>מתי להשתמש</th><th>דוגמה</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="td-badge">צ'אט (Chat)</span></td>
+            <td>שאלות מהירות, הסברים, חקירה ראשונית</td>
+            <td>"מה הפונקציה הזו עושה?"</td>
+          </tr>
+          <tr>
+            <td><span class="td-badge">מצב סוכן</span></td>
+            <td>תהליכי עבודה רב-שלביים, ניתוח עומק, יצירת קוד</td>
+            <td>"חקור את הכשל הזה מקצה לקצה"</td>
+          </tr>
+          <tr>
+            <td><span class="td-badge">CLI / טרמינל</span></td>
+            <td>אוטומציה, הרצת סקריפטים, Pipelines</td>
+            <td>"הרץ סקריפט השוואה על 3 ריצות ניסוי"</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ════ CHAPTER 9 ══════════════════════════════════════════════════ -->
+  <section id="ch9">
+    <div class="chapter-header">
+      <div class="chapter-num">פרק 09</div>
+      <h2 class="chapter-title">הנדסת פרומפטים — איך להנחות סוכן</h2>
+    </div>
+
+    <h3>9.1 כלל היסוד</h3>
+    <div class="golden-rule">
+      <code>Garbage prompt → garbage output.</code>
+      <p>הפער בין פרומפט טוב לרע אינו שיפור שולי — זה ההבדל בין תוצאה שימושית לבזבוז זמן.</p>
+    </div>
+
+    <section id="ch9-2">
+      <h3>9.2 תבנית — חקירה / ניתוח כשלים</h3>
+      <pre><code>Analyze the following logs:
+[paste logs or reference file path]
+
+Focus on:
+- Primary failure cause (with evidence from the log)
+- Secondary contributing factors
+- Whether environment or configuration issues could be involved
+
+Output:
+- Structured explanation of the failure chain
+- Top 3 hypotheses, ranked by likelihood
+- For each hypothesis: evidence that supports it, and what
+  test would confirm or deny it<span class="label">PROMPT TEMPLATE</span></code></pre>
+    </section>
+
+    <section id="ch9-3">
+      <h3>9.3 תבנית — השוואת ריצות ניסוי</h3>
+      <pre><code>Compare these experiment runs:
+[run1 details]
+[run2 details]
+
+Output:
+- Table of key metric comparisons
+- Which run is better overall and why
+- Trade-offs (where run1 wins, where run2 wins)
+- Recommendations for next experiments
+- Confirm comparison validity (same baseline environment and config)<span class="label">PROMPT TEMPLATE</span></code></pre>
+    </section>
+
+    <section id="ch9-4">
+      <h3>9.4 תבנית — כתיבת קוד</h3>
+      <pre><code>Write a Python function that:
+- Input:  [describe input format and type]
+- Output: [describe output format and type]
+- Constraints: [edge cases, performance requirements, limits]
+
+Also include:
+- Type hints and docstring
+- Unit tests covering: normal case + at least 2 edge cases
+- Error handling for invalid input<span class="label">PROMPT TEMPLATE</span></code></pre>
+    </section>
+
+    <section id="ch9-5">
+      <h3>9.5 תבנית — מניעת הזיות / זיקוק איטרטיבי</h3>
+      <pre><code>Double-check your previous answer:
+- What assumptions did you make? Are they valid given the data?
+- What could be wrong with your analysis?
+- Is there an alternative explanation you didn't consider?
+- How would you validate your conclusions?<span class="label">PROMPT TEMPLATE</span></code></pre>
+      <p>תבנית זו היא קריטית. היא מאלצת את הסוכן לעצור ולבדוק את הלוגיקה שלו במקום להמשיך בביטחון על בסיס הנחות שגויות. השתמשו בה בכל פעם שהמחיר של תשובה שגויה הוא גבוה.</p>
+    </section>
+
+    <section id="ch9-6">
+      <h3>9.6 תבנית — סוכן ברווז הגומי (Rubber Duck Agent)</h3>
+      <p>בדיבאג הקלאסי של "ברווז הגומי" אתם מסבירים את הבעיה לברווז דומם, ועצם הניסוח חושף את הפתרון. בגרסת הסוכן הופכים את התרגיל — הסוכן <em>הוא</em> הברווז, אבל ברווז ששואל בחזרה.</p>
+      <p>הקצו סוכן ייעודי שתפקידו היחיד הוא לחקור אתכם — לא לכתוב קוד ולא להציע פתרון. הוא מאתגר הנחות, מבקש הקשר חסר ומחזיר לכם את הלוגיקה שלכם עד שהבעיה האמיתית מתבררת. כשתסיימו לענות, הצעד הבא בדרך כלל ברור, והפרומפט שתעבירו לסוכן המבצע יהיה חד מספיק כדי באמת לעבוד.</p>
+      <pre><code>You are my Rubber Duck Agent. You do NOT write code,
+propose solutions, or take actions.
+
+Your only job:
+- Ask me clarifying questions, one at a time
+- Challenge my assumptions and surface what I'm taking for granted
+- Reflect my reasoning back to me in your own words
+- Point out gaps, contradictions, or missing context
+- Keep asking until the real problem (not the symptom) is clear
+
+Topic I want to think through:
+[describe the problem, bug, design decision, or stuck point]
+
+Begin with the single most important question.<span class="label">PROMPT TEMPLATE</span></code></pre>
+      <div class="insight"><p><strong>מתי להשתמש:</strong> כשנתקעים על באג, כשלא ברור איך לתחום משימה, לפני כתיבת פרומפט גדול לסוכן מבצע, או בכל פעם שאתם תופסים את עצמכם מקלידים קיר של הקשר ומבינים שאתם עדיין לא באמת מבינים את הבעיה.</p></div>
+      <p><strong>טיפ פייפליין:</strong> שלבו את הברווז עם הסוכן המבצע. קודם מבריזים מול הברווז כדי לחדד את השאלה, ואז מעבירים את ניסוח הבעיה המזוקק לסוכן שעושה את העבודה בפועל. הפיצול לשני סוכנים — <em>חושב</em> ו<em>מבצע</em> — מנצח באופן עקבי סוכן בודד שמנסה לעשות את שניהם.</p>
+    </section>
+  </section>
+
+  <!-- ════ CHAPTER 10 ══════════════════════════════════════════════════ -->
+  <section id="ch10">
+    <div class="chapter-header">
+      <div class="chapter-num">פרק 10</div>
+      <h2 class="chapter-title">ניהול קונטקסט — עבודה בתוך מגבלות</h2>
+    </div>
+
+    <h3>10.1 הבעיה</h3>
+    <p>כל סוכן פועל בתוך חלון קונטקסט סופי. כשהוא מתמלא, קורה אחד משני דברים: הסוכן מסרב לקבל קלט נוסף, או שהתוכן נדחס אוטומטית. בעיית הדחיסה היא חמקמקה — הסוכן לא יודע שהוא איבד מידע וממשיך לעבוד כאילו הכל שלם.</p>
+    <p>אירוע דחיסת קונטקסט (למשל, 54,000 טוקנים שנדחסים ל-24,000) יכול לקרות חיצונית, על ידי הפלטפורמה — לא על ידי הסוכן עצמו. לסוכן אין מודעות לאירוע.</p>
+
+    <h3>10.2 אסטרטגיות התמודדות</h3>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num"></div>
+        <div class="step-body">
+          <h4>עבודה במקטעים (Chunks)</h4>
+          <p>במקום להדביק 10,000 שורות של לוג בבת אחת, פצלו למקטעים ונתחו כל אחד מהם בנפרד. מזגו את המסקנות בסוף.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num"></div>
+        <div class="step-body">
+          <h4>"עיגון" מחדש של קונטקסט מפתח</h4>
+          <p>בסשנים ארוכים, חזרו מעת לעת על העובדות החשובות ביותר. אל תניחו שהסוכן זוכר מה אמרתם לפני 20 הודעות.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num"></div>
+        <div class="step-body">
+          <h4>שמירת תוצאות ביניים</h4>
+          <p>בכל פעם שהסוכן מגיע למסקנה חשובה, שמרו אותה לקובץ חיצוני. אם הקונטקסט ייחתך, יהיה לכם גיבוי.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num"></div>
+        <div class="step-body">
+          <h4>שימוש בעיצוב של ריבוי סוכנים</h4>
+          <p>במקום סשן אחד ארוך, פצלו לסשנים קצרים עם סוכנים נפרדים — כשכל אחד מקבל רק את מה שהוא צריך. זהו הפתרון הארכיטקטוני למגבלות קונטקסט.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════ CHAPTER 11 ══════════════════════════════════════════════════ -->
+  <section id="ch11">
+    <div class="chapter-header">
+      <div class="chapter-num">פרק 11</div>
+      <h2 class="chapter-title">הערכה (Evaluation) — איך לדעת שהסוכן באמת עובד</h2>
+    </div>
+
+    <h3>11.1 מדוע הערכה סיסטמטית היא חובה</h3>
+    <p>אם אתם בונים תהליכי עבודה המבוססים על סוכנים, עליכם לדעת האם הם באמת עובדים. "זה מרגיש כאילו זה עובד" אינו מדד. אתם זקוקים למטריקות — במיוחד לפני פריסת מיומנות או Pipeline למשתמשים אחרים.</p>
+    <p>בנו מעריכים (Evaluators) ייעודיים לכל מיומנות, תוך שימוש בשילוב של נתונים סינתטיים (קבצים שהוזרקו להם בעיות ידועות) ודוגמאות מהעולם האמיתי מתוך מקרי שימוש בפועל.</p>
+
+    <h3>11.2 מטריקות מומלצות</h3>
+    <div class="metrics-grid">
+      <div class="metric-card">
+        <div class="metric-icon">🎯</div>
+        <div class="metric-name">דיוק (Precision)</div>
+        <div class="metric-desc">איזה חלק מהתשובות של הסוכן היו נכונות?</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-icon">📡</div>
+        <div class="metric-name">Recall</div>
+        <div class="metric-desc">איזה חלק מהתשובות הנכונות הסוכן הצליח למצוא?</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-icon">⚡</div>
+        <div class="metric-name">כמות קריאות לכלים</div>
+        <div class="metric-desc">האם הסוכן עובד ביעילות, או מבזבז קריאות?</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-icon">⏱</div>
+        <div class="metric-name">זמן ביצוע</div>
+        <div class="metric-desc">כמה זמן לוקחת כל משימה מקצה לקצה?</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-icon">👥</div>
+        <div class="metric-name">פידבק משתמשים</div>
+        <div class="metric-desc">האם זה עזר? האם זה הציף בעיות שהמשתמש לא ידע על קיומן?</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-icon">🔁</div>
+        <div class="metric-name">שיעור רגרסיה</div>
+        <div class="metric-desc">האם שיפור מיומנות אחת פוגע במיומנות אחרת?</div>
+      </div>
+    </div>
+
+    <h3>11.3 שיפור פרומפטים — לופ הפידבק</h3>
+    <p>שיפור פרומפטים מבוצע כיום באופן ידני ברוב הצוותים: משנים פרומפט, מריצים את סט ההערכה, בודקים האם המטריקות השתפרו. היעד לטווח ארוך הוא אוטומציה של הלופ הזה — סקריפטים שאוספים נתוני שימוש בסוכן, מזהים כשלים בפרומפטים ומציעים שיפורים ממוקדים. זה הופך את הנדסת הפרומפטים מאומנות למערכת סיסטמטית.</p>
+  </section>
+
+  <!-- ════ CHAPTER 12 ══════════════════════════════════════════════════ -->
+  <section id="ch12">
+    <div class="chapter-header">
+      <div class="chapter-num">פרק 12</div>
+      <h2 class="chapter-title">ה-Pipeline המלא — חיבור הכל יחד</h2>
+    </div>
+
+    <p>כך נראה תהליך עבודה של סוכן ברמה מקצועית, כאשר כל העקרונות במדריך זה מיושמים:</p>
+
+    <div class="pipeline">
+      <div class="pipe-step">
+        <div class="pipe-num">0</div>
+        <div class="pipe-label">טעינת זיכרון</div>
+        <div class="pipe-sublabel">project_context + סשן קודם</div>
+      </div>
+      <div class="pipe-step active">
+        <div class="pipe-num">1</div>
+        <div class="pipe-label">חקירה</div>
+        <div class="pipe-sublabel">ניתוח פתוח</div>
+      </div>
+      <div class="pipe-step">
+        <div class="pipe-num">2</div>
+        <div class="pipe-label">מיומנויות</div>
+        <div class="pipe-sublabel">הפעלת מיומנויות ממוקדות</div>
+      </div>
+      <div class="pipe-step">
+        <div class="pipe-num">3</div>
+        <div class="pipe-label">כלים</div>
+        <div class="pipe-sublabel">ביצוע פעולות דטרמיניסטיות</div>
+      </div>
+      <div class="pipe-step">
+        <div class="pipe-num">4</div>
+        <div class="pipe-label">הסקה</div>
+        <div class="pipe-sublabel">השערות + דירוג</div>
+      </div>
+      <div class="pipe-step">
+        <div class="pipe-num">5</div>
+        <div class="pipe-label">אימות</div>
+        <div class="pipe-sublabel">בדיקות דטרמיניסטיות</div>
+      </div>
+      <div class="pipe-step">
+        <div class="pipe-num">6</div>
+        <div class="pipe-label">שימור</div>
+        <div class="pipe-sublabel">כתיבת session_summary.md</div>
+      </div>
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>שלב</th><th>פעולה</th><th>עיקרון מיושם</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>0 — טעינת זיכרון</td><td>טעינת <code>project_context.md</code> ו-<code>session_summary.md</code></td><td>סוכן בעל מצב באמצעות Markdown (פרק 6)</td></tr>
+          <tr><td>1 — חקירה</td><td>ניתוח פתוח: "נתח את הכשל הנוכחי על סמך הלוגים הללו."</td><td>מתן מרחב חקירה חופשי לסוכן (פרק 2)</td></tr>
+          <tr><td>2 — מיומנויות</td><td>הפעלה: <code>extract_metrics</code>, <code>check_env_validity</code>, <code>detect_anomalies</code></td><td>מיומנויות צרות ומדויקות (פרק 4)</td></tr>
+          <tr><td>3 — כלים</td><td>הרצת סקריפטים, קריאת קבצים, ביצוע השוואות</td><td>ביצוע ≠ הסקה (פרק 5)</td></tr>
+          <tr><td>4 — הסקה</td><td>הסוכן מציע גורמי שורש, מדרג השערות ומסביר</td><td>LLM לשיקול דעת, כלי לחישוב (פרק 5)</td></tr>
+          <tr><td>5 — אימות</td><td>הרצת בדיקות דטרמיניסטיות, השוואה לתוצאות צפויות</td><td>ארבע רמות וולידציה (פרק 7)</td></tr>
+          <tr><td>6 — שימור</td><td>כתיבת <code>session_summary.md</code> עם ממצאים וצעדים הבאים</td><td>זיכרון ב-Markdown (פרק 6)</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ════ CHAPTER 13 ══════════════════════════════════════════════════ -->
+  <section id="ch13">
+    <div class="chapter-header">
+      <div class="chapter-num">פרק 13</div>
+      <h2 class="chapter-title">מה הלאה — לופים של שיפור עצמי ו-MCP</h2>
+    </div>
+
+    <h3>13.1 לופ השיפור העצמי</h3>
+    <p>החזית הבאה בתהליכי עבודה אג'נטיים היא שימוש בסוכן כדי לשפר את הסוכן. לופים חוזרים של חקירה ופידבק — שבהם הסוכן מזהה תבניות בכשלים של עצמו או באינטראקציות עם משתמשים — יכולים להפוך לשיפורי תכונות, פרומפטים טובים יותר או מיומנויות חדשות בעזרת אותה תשתית AI. זה סוגר את הלופ: הסוכן הופך טוב יותר בדומיין שלו ככל שמשתמשים בו יותר.</p>
+
+    <h3>13.2 MCP — Model Context Protocol</h3>
+    <p>הסטנדרט המתגבש לחיבור סוכנים למקורות נתונים חיים הוא ה-Model Context Protocol (MCP). במקום שהמשתמש ידביק נתונים באופן ידני לסוכן, הסוכן מתחבר ישירות למסדי נתונים של רגרסיות, מריצי ניסויים, מערכות ניהול באגים ולוחות בקרה — ושולף את הנתונים להם הוא זקוק באופן עצמאי.</p>
+
+    <div class="insight">
+      <div class="insight-label">שינוי פרדיגמה</div>
+      <p>מ"אני מביא את הנתונים לסוכן" ← ל"הסוכן ניגש לנתונים בעצמו". MCP הופך סוכנים לאזרחים מן המניין בתשתית הנתונים שלכם.</p>
+    </div>
+
+    <p>סוכנים המחוברים ב-MCP יכולים לתשאל באופן עצמאי תוצאות ניסויים חיות, להצליב מקורות נתונים מרובים ולהפיק ניתוחים שבעבר היו דורשים איסוף נתונים ידני — מה שמסיר את אחד מחסמי החיכוך הגדולים שנותרו בתהליכי עבודה הנדסיים מבוססי סוכנים.</p>
+  </section>
+
+  <!-- ════ EXECUTIVE SUMMARY ══════════════════════════════════════════ -->
+  <section id="summary">
+    <div class="chapter-header">
+      <div class="chapter-num">סיכום</div>
+      <h2 class="chapter-title">סיכום מנהלים</h2>
+    </div>
+
+    <p>שמונת העקרונות המגדירים הנדסה אג'נטית בביצועים גבוהים:</p>
+
+    <div class="exec-summary">
+      <table>
+        <thead>
+          <tr><th>עיקרון</th><th>בפרקטיקה</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>הסוכן כמכפיל כוח</td>
+            <td>הסוכן אינו מחליף אתכם — הוא מכפיל את התפוקה שלכם. שיקול הדעת שלכם נשאר האילוץ המרכזי.</td>
+          </tr>
+          <tr>
+            <td>העבודה שמסביב לעבודה</td>
+            <td>הערך הגדול ביותר הוא באוטומציה של "עבודת דבק": ניתוח לוגים, הפקת דוחות, השוואת ריצות, סקריפטים.</td>
+          </tr>
+          <tr>
+            <td>ריבוי סוכנים > סוכן-על</td>
+            <td>פצלו משימות גדולות לסוכנים קטנים וממוקדים. האיכות נשארת גבוהה; הקונטקסט נשאר נקי.</td>
+          </tr>
+          <tr>
+            <td>מיומנויות: צרות וברורות</td>
+            <td>מעט מיומנויות עם שמות מדויקים ותיאורים ייחודיים עדיפות על ספרייה מפוזרת שמבלבלת את הסוכן.</td>
+          </tr>
+          <tr>
+            <td>כלים לביצוע</td>
+            <td>חישוב דטרמיניסטי שייך לכלים. שיקול דעת ופרשנות שייכים ל-LLM.</td>
+          </tr>
+          <tr>
+            <td>Markdown = זיכרון לטווח ארוך</td>
+            <td>קבצי קונטקסט בין סשנים מעניקים לסוכן המשכיות. כתבו אותם בסוף סשן; טענו בתחילתו.</td>
+          </tr>
+          <tr>
+            <td>תמיד לבצע וולידציה</td>
+            <td>הסוכן נשמע בטוח בעצמו גם כשהוא טועה. בצעו וולידציה בכל ארבע הרמות, בכל פעם.</td>
+          </tr>
+          <tr>
+            <td>גישה היברידית</td>
+            <td>קוד דטרמיניסטי כעוגן + תובנות AI = הארכיטקטורה הנכונה לעבודה הנדסית בעלת חשיבות גבוהה.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+</main>
+</div>
+
+<!-- ═══ FOOTER ════════════════════════════════════════════════════════ -->
+<footer>
+  <div class="brand">NL <span>Practical AI</span> Consulting</div>
+  <div>תכנות אג'נטי ו-Vibe Coding — מדריך למשתמש · מהדורה 1.0 · 2026</div>
+  <div>לשימוש פנימי · כל העקרונות מבוססים על פרקטיקה מתוקפת בתעשייה</div>
+</footer>
+
+<!-- ═══ NAV HIGHLIGHT SCRIPT ══════════════════════════════════════════ -->
+<script>
+(function(){
+  const navLinks = document.querySelectorAll('nav.sidebar .nav-item');
+  const sections = document.querySelectorAll('section[id]');
+  let ticking = false;
+
+  function update(){
+    const scrollY = window.scrollY + 100;
+    let current = '';
+    sections.forEach(s => {
+      if(scrollY >= s.offsetTop) current = s.id;
+    });
+    navLinks.forEach(a => {
+      a.classList.toggle('active', a.getAttribute('href') === '#' + current);
+    });
+    ticking = false;
+  }
+
+  window.addEventListener('scroll', ()=>{
+    if(!ticking){ requestAnimationFrame(update); ticking = true; }
+  }, {passive:true});
+
+  update();
+})();
+</script>
+
+</body>
+</html>

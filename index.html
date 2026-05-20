@@ -1,117 +1,1768 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Nir Lotan - Machine Learning Researcher Homepage">
-    <title>Nir Lotan - Researcher Homepage</title>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
-    <style>
-        body {
-            font-family: 'Roboto', sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f4f4f4;
-            color: #333;
-        }
-        header {
-            background-color: #333;
-            color: #fff;
-            padding: 10px 0;
-            text-align: center;
-        }
-        header h1 {
-            margin: 0;
-        }
-        main {
-            padding: 20px;
-            max-width: 900px;
-            margin: 0 auto;
-            background-color: #fff;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-        section {
-            margin-bottom: 30px;
-        }
-        h2 {
-            border-bottom: 2px solid #333;
-            padding-bottom: 5px;
-            margin-bottom: 20px;
-        }
-        a {
-            color: #0073e6;
-            text-decoration: none;
-        }
-        a:hover {
-            text-decoration: underline;
-        }
-        footer {
-            text-align: center;
-            padding: 20px 0;
-            background-color: #333;
-            color: #fff;
-        }
-    </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Agentic & Vibe Coding — Practitioner's Guide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Roboto:wght@300;400;500&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<style>
+/* ─── Design Tokens ────────────────────────────────────────────────── */
+:root {
+  --slate-navy:    #1A2A3A;
+  --bright-copper: #D96C06;
+  --steel-gray:    #8E9BAE;
+  --crisp-white:   #F8F9FA;
+  --pure-white:    #FFFFFF;
+  --copper-light:  #F2820C18;
+  --copper-mid:    #D96C0620;
+  --navy-mid:      #2A3F54;
+  --border:        #D0D7E0;
+
+  --sp-sm:  8px;
+  --sp-md:  16px;
+  --sp-lg:  24px;
+  --sp-xl:  32px;
+  --sp-xxl: 64px;
+
+  --radius: 4px;
+  --sidebar-w: 280px;
+  --header-h: 64px;
+}
+
+/* ─── Reset ───────────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; font-size: 16px; }
+body {
+  font-family: 'Roboto', sans-serif;
+  font-weight: 400;
+  color: var(--slate-navy);
+  background: var(--crisp-white);
+  line-height: 1.7;
+}
+
+/* ─── Header ──────────────────────────────────────────────────────── */
+header {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  height: var(--header-h);
+  background: var(--slate-navy);
+  display: flex;
+  align-items: center;
+  padding: 0 var(--sp-xl);
+  z-index: 100;
+  border-bottom: 3px solid var(--bright-copper);
+}
+.header-logo {
+  font-family: 'Inter', sans-serif;
+  font-weight: 700;
+  font-size: 1.1rem;
+  color: var(--pure-white);
+  letter-spacing: -0.02em;
+  display: flex;
+  align-items: center;
+  gap: var(--sp-sm);
+}
+.header-logo .accent { color: var(--bright-copper); }
+.header-tag {
+  margin-left: auto;
+  font-family: 'Roboto Mono', monospace;
+  font-size: 0.7rem;
+  color: var(--steel-gray);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+.lang-switch {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  margin-left: var(--sp-xl);
+  font-family: 'Roboto Mono', monospace;
+  font-size: 0.7rem;
+  letter-spacing: 0.06em;
+}
+.lang-switch a, .lang-switch span {
+  padding: 3px 8px;
+  border-radius: 4px;
+  text-decoration: none;
+  text-transform: uppercase;
+  transition: background 0.15s, color 0.15s;
+}
+.lang-switch a {
+  color: var(--steel-gray);
+}
+.lang-switch a:hover {
+  background: var(--navy-mid);
+  color: var(--pure-white);
+}
+.lang-switch span.active-lang {
+  background: var(--bright-copper);
+  color: var(--pure-white);
+  font-weight: 700;
+}
+.lang-switch .sep {
+  color: var(--steel-gray);
+  padding: 0;
+  font-size: 0.65rem;
+}
+
+/* ─── Layout ──────────────────────────────────────────────────────── */
+.layout {
+  display: flex;
+  padding-top: var(--header-h);
+  min-height: 100vh;
+}
+
+/* ─── Sidebar ─────────────────────────────────────────────────────── */
+nav.sidebar {
+  position: fixed;
+  top: var(--header-h);
+  left: 0;
+  bottom: 0;
+  width: var(--sidebar-w);
+  background: var(--slate-navy);
+  overflow-y: auto;
+  padding: var(--sp-lg) 0 var(--sp-xxl);
+  z-index: 90;
+}
+nav.sidebar::-webkit-scrollbar { width: 4px; }
+nav.sidebar::-webkit-scrollbar-track { background: transparent; }
+nav.sidebar::-webkit-scrollbar-thumb { background: var(--navy-mid); border-radius: 2px; }
+
+.nav-section-label {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.65rem;
+  font-weight: 600;
+  color: var(--steel-gray);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  padding: var(--sp-lg) var(--sp-md) var(--sp-sm);
+}
+.nav-item {
+  display: block;
+  font-family: 'Roboto', sans-serif;
+  font-size: 0.82rem;
+  font-weight: 400;
+  color: #CBD5E1;
+  text-decoration: none;
+  padding: 7px var(--sp-md);
+  border-left: 2px solid transparent;
+  transition: all 0.15s ease;
+  line-height: 1.4;
+}
+.nav-item:hover {
+  color: var(--pure-white);
+  background: rgba(255,255,255,0.05);
+  border-left-color: var(--steel-gray);
+}
+.nav-item.active {
+  color: var(--bright-copper);
+  border-left-color: var(--bright-copper);
+  background: var(--copper-mid);
+}
+.nav-item.chapter {
+  font-weight: 600;
+  font-size: 0.8rem;
+  color: var(--pure-white);
+  padding-top: 10px;
+  padding-bottom: 5px;
+}
+.nav-divider {
+  border: none;
+  border-top: 1px solid rgba(255,255,255,0.08);
+  margin: var(--sp-sm) var(--sp-md);
+}
+
+/* ─── Main Content ────────────────────────────────────────────────── */
+main {
+  margin-left: var(--sidebar-w);
+  flex: 1;
+  padding: var(--sp-xxl) var(--sp-xxl) var(--sp-xxl) calc(var(--sp-xxl) + 8px);
+  max-width: 920px;
+}
+
+/* ─── Hero ────────────────────────────────────────────────────────── */
+.hero {
+  background: var(--slate-navy);
+  color: var(--pure-white);
+  border-radius: var(--radius);
+  padding: var(--sp-xxl) var(--sp-xl);
+  margin-bottom: var(--sp-xxl);
+  position: relative;
+  overflow: hidden;
+}
+.hero::before {
+  content: '';
+  position: absolute;
+  top: 0; right: 0;
+  width: 320px; height: 100%;
+  background: linear-gradient(135deg, transparent 40%, rgba(217,108,6,0.12) 100%);
+  pointer-events: none;
+}
+.hero-eyebrow {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 0.72rem;
+  color: var(--bright-copper);
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  margin-bottom: var(--sp-md);
+}
+.hero h1 {
+  font-family: 'Inter', sans-serif;
+  font-size: 2.4rem;
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -0.03em;
+  margin-bottom: var(--sp-md);
+}
+.hero h1 span { color: var(--bright-copper); }
+.hero p {
+  font-size: 1.05rem;
+  color: #CBD5E1;
+  max-width: 540px;
+  line-height: 1.6;
+  margin-bottom: var(--sp-lg);
+}
+.hero-meta {
+  display: flex;
+  gap: var(--sp-lg);
+  flex-wrap: wrap;
+}
+.hero-meta-item {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.hero-meta-item .label {
+  font-size: 0.68rem;
+  color: var(--steel-gray);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+.hero-meta-item .value {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--pure-white);
+}
+
+/* ─── Chapter Dividers ────────────────────────────────────────────── */
+.chapter-header {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--sp-md);
+  margin: var(--sp-xxl) 0 var(--sp-lg);
+  padding-top: var(--sp-xl);
+  border-top: 2px solid var(--border);
+}
+.chapter-header:first-of-type { border-top: none; margin-top: 0; }
+.chapter-num {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 0.72rem;
+  font-weight: 500;
+  color: var(--bright-copper);
+  background: var(--copper-light);
+  border: 1px solid var(--bright-copper);
+  border-radius: var(--radius);
+  padding: 3px 8px;
+  white-space: nowrap;
+  margin-top: 6px;
+  letter-spacing: 0.05em;
+}
+.chapter-title {
+  font-family: 'Inter', sans-serif;
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: var(--slate-navy);
+  letter-spacing: -0.02em;
+  line-height: 1.25;
+}
+
+/* ─── Section Headers ─────────────────────────────────────────────── */
+h3 {
+  font-family: 'Inter', sans-serif;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--slate-navy);
+  margin: var(--sp-xl) 0 var(--sp-sm);
+  letter-spacing: -0.01em;
+}
+h4 {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--bright-copper);
+  margin: var(--sp-lg) 0 var(--sp-sm);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+p { margin-bottom: var(--sp-md); color: #2A3A4A; }
+
+/* ─── Key Insight Cards ───────────────────────────────────────────── */
+.insight {
+  background: var(--pure-white);
+  border: 1px solid var(--border);
+  border-left: 4px solid var(--bright-copper);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  padding: var(--sp-lg);
+  margin: var(--sp-lg) 0;
+}
+.insight-label {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 0.65rem;
+  font-weight: 500;
+  color: var(--bright-copper);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  margin-bottom: var(--sp-sm);
+}
+.insight p { margin: 0; font-weight: 500; color: var(--slate-navy); }
+
+.callout {
+  background: var(--copper-light);
+  border: 1px solid rgba(217,108,6,0.25);
+  border-radius: var(--radius);
+  padding: var(--sp-lg);
+  margin: var(--sp-lg) 0;
+}
+.callout p { margin: 0; }
+
+.callout.danger {
+  background: #FFF2F2;
+  border-color: #FFBABA;
+}
+.callout.danger p { color: #8B0000; }
+.callout.danger::before {
+  content: '⚠ ';
+  font-weight: 700;
+}
+
+/* ─── Numbered Steps ──────────────────────────────────────────────── */
+.steps { counter-reset: step; margin: var(--sp-lg) 0; }
+.step {
+  counter-increment: step;
+  display: flex;
+  gap: var(--sp-md);
+  margin-bottom: var(--sp-md);
+  background: var(--pure-white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: var(--sp-md) var(--sp-lg);
+  align-items: flex-start;
+}
+.step-num {
+  flex-shrink: 0;
+  width: 28px; height: 28px;
+  background: var(--slate-navy);
+  color: var(--pure-white);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+.step-num::before { content: counter(step); }
+.step-body h4 { margin: 0 0 4px; }
+.step-body p { margin: 0; font-size: 0.92rem; }
+
+/* ─── Capability Grid ─────────────────────────────────────────────── */
+.cap-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--sp-md);
+  margin: var(--sp-lg) 0;
+}
+.cap-card {
+  background: var(--pure-white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: var(--sp-lg);
+}
+.cap-card.good { border-top: 3px solid #16A34A; }
+.cap-card.caution { border-top: 3px solid #D97706; }
+.cap-card h4 {
+  color: var(--slate-navy);
+  margin: 0 0 var(--sp-sm);
+  text-transform: none;
+  letter-spacing: 0;
+  font-size: 0.9rem;
+}
+.cap-card h4.good-label { color: #16A34A; }
+.cap-card h4.caution-label { color: #D97706; }
+.cap-card ul { padding-left: var(--sp-md); }
+.cap-card ul li { font-size: 0.88rem; margin-bottom: 4px; color: #2A3A4A; }
+
+/* ─── Code Blocks ─────────────────────────────────────────────────── */
+pre {
+  background: var(--slate-navy);
+  color: #E2E8F0;
+  border-radius: var(--radius);
+  padding: var(--sp-lg);
+  overflow-x: auto;
+  font-family: 'Roboto Mono', monospace;
+  font-size: 0.82rem;
+  line-height: 1.65;
+  margin: var(--sp-md) 0 var(--sp-lg);
+  position: relative;
+}
+pre .label {
+  position: absolute;
+  top: var(--sp-sm); right: var(--sp-sm);
+  font-size: 0.6rem;
+  color: var(--steel-gray);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+code { font-family: 'Roboto Mono', monospace; font-size: 0.85em; }
+p code, li code {
+  background: #EFF2F7;
+  color: var(--slate-navy);
+  padding: 1px 5px;
+  border-radius: 3px;
+  font-size: 0.82rem;
+}
+.highlight { color: var(--bright-copper); font-weight: 500; }
+
+/* ─── Tables ──────────────────────────────────────────────────────── */
+.table-wrap { overflow-x: auto; margin: var(--sp-lg) 0; }
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.88rem;
+}
+thead th {
+  background: var(--slate-navy);
+  color: var(--pure-white);
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  padding: var(--sp-sm) var(--sp-md);
+  text-align: left;
+  white-space: nowrap;
+}
+tbody td {
+  padding: var(--sp-sm) var(--sp-md);
+  border-bottom: 1px solid var(--border);
+  vertical-align: top;
+  line-height: 1.5;
+}
+tbody tr:last-child td { border-bottom: none; }
+tbody tr:nth-child(even) td { background: #F4F6F9; }
+.td-badge {
+  display: inline-block;
+  font-family: 'Roboto Mono', monospace;
+  font-size: 0.72rem;
+  font-weight: 500;
+  background: var(--copper-light);
+  color: var(--bright-copper);
+  border: 1px solid rgba(217,108,6,0.3);
+  border-radius: var(--radius);
+  padding: 1px 7px;
+  white-space: nowrap;
+}
+
+/* ─── Pipeline Diagram ────────────────────────────────────────────── */
+.pipeline {
+  display: flex;
+  align-items: stretch;
+  gap: 0;
+  margin: var(--sp-lg) 0;
+  overflow-x: auto;
+  padding-bottom: var(--sp-sm);
+}
+.pipe-step {
+  flex: 1;
+  min-width: 110px;
+  background: var(--pure-white);
+  border: 1px solid var(--border);
+  padding: var(--sp-md) var(--sp-sm);
+  text-align: center;
+  position: relative;
+}
+.pipe-step:first-child { border-radius: var(--radius) 0 0 var(--radius); }
+.pipe-step:last-child { border-radius: 0 var(--radius) var(--radius) 0; }
+.pipe-step + .pipe-step { border-left: none; }
+.pipe-step.active {
+  background: var(--slate-navy);
+  border-color: var(--slate-navy);
+}
+.pipe-step.active .pipe-label { color: var(--pure-white); }
+.pipe-step.active .pipe-num { background: var(--bright-copper); color: var(--pure-white); }
+.pipe-num {
+  width: 24px; height: 24px;
+  background: var(--crisp-white);
+  border: 1px solid var(--border);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  margin: 0 auto var(--sp-sm);
+  font-family: 'Inter', sans-serif;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--slate-navy);
+}
+.pipe-label {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--slate-navy);
+  line-height: 1.3;
+}
+.pipe-sublabel {
+  font-size: 0.68rem;
+  color: var(--steel-gray);
+  margin-top: 3px;
+  line-height: 1.3;
+}
+
+/* ─── Architecture Cards ──────────────────────────────────────────── */
+.arch-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--sp-md);
+  margin: var(--sp-lg) 0;
+}
+.arch-card {
+  background: var(--pure-white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: var(--sp-lg);
+}
+.arch-card h4 {
+  color: var(--slate-navy);
+  font-size: 0.82rem;
+  text-transform: none;
+  letter-spacing: 0;
+  margin: 0 0 var(--sp-sm);
+  display: flex;
+  align-items: center;
+  gap: var(--sp-sm);
+}
+.arch-badge {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 0.65rem;
+  background: var(--crisp-white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1px 6px;
+  color: var(--steel-gray);
+  flex-shrink: 0;
+}
+.arch-card p { font-size: 0.84rem; color: #3A4A5A; margin-bottom: var(--sp-sm); }
+.arch-pro, .arch-con {
+  font-size: 0.8rem;
+  padding: 2px 0;
+  display: flex;
+  gap: 5px;
+  align-items: baseline;
+}
+.arch-pro::before { content: '+'; color: #16A34A; font-weight: 700; }
+.arch-con::before { content: '−'; color: #DC2626; font-weight: 700; }
+
+/* ─── Summary / Exec Summary Table ───────────────────────────────── */
+.exec-summary {
+  background: var(--slate-navy);
+  border-radius: var(--radius);
+  overflow: hidden;
+  margin: var(--sp-xl) 0;
+}
+.exec-summary table { font-size: 0.88rem; }
+.exec-summary thead th {
+  background: var(--bright-copper);
+  color: var(--pure-white);
+  padding: var(--sp-md) var(--sp-lg);
+}
+.exec-summary tbody td {
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+  padding: var(--sp-md) var(--sp-lg);
+  color: #CBD5E1;
+}
+.exec-summary tbody tr:nth-child(even) td { background: rgba(255,255,255,0.03); }
+.exec-summary tbody td:first-child {
+  font-family: 'Roboto Mono', monospace;
+  color: var(--bright-copper);
+  font-size: 0.82rem;
+  white-space: nowrap;
+}
+
+/* ─── Validation Levels ───────────────────────────────────────────── */
+.validation-levels {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--sp-sm);
+  margin: var(--sp-lg) 0;
+}
+.val-level {
+  background: var(--pure-white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: var(--sp-md);
+  text-align: center;
+}
+.val-num {
+  font-family: 'Inter', sans-serif;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--bright-copper);
+  line-height: 1;
+  margin-bottom: var(--sp-sm);
+}
+.val-name {
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+  font-size: 0.82rem;
+  color: var(--slate-navy);
+  margin-bottom: 4px;
+}
+.val-desc {
+  font-size: 0.76rem;
+  color: var(--steel-gray);
+  line-height: 1.4;
+}
+
+/* ─── Metrics Cards ───────────────────────────────────────────────── */
+.metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--sp-md);
+  margin: var(--sp-lg) 0;
+}
+.metric-card {
+  background: var(--pure-white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: var(--sp-lg);
+}
+.metric-icon {
+  font-size: 1.4rem;
+  margin-bottom: var(--sp-sm);
+}
+.metric-name {
+  font-family: 'Inter', sans-serif;
+  font-weight: 700;
+  font-size: 0.9rem;
+  color: var(--slate-navy);
+  margin-bottom: 4px;
+}
+.metric-desc { font-size: 0.82rem; color: var(--steel-gray); }
+
+/* ─── Best-practice chips ─────────────────────────────────────────── */
+.chips { display: flex; flex-wrap: wrap; gap: var(--sp-sm); margin: var(--sp-md) 0; }
+.chip {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 0.75rem;
+  background: var(--copper-light);
+  color: var(--bright-copper);
+  border: 1px solid rgba(217,108,6,0.25);
+  border-radius: var(--radius);
+  padding: 4px 10px;
+}
+
+/* ─── Golden Rule ─────────────────────────────────────────────────── */
+.golden-rule {
+  background: var(--slate-navy);
+  border-radius: var(--radius);
+  padding: var(--sp-xl);
+  text-align: center;
+  margin: var(--sp-xl) 0;
+}
+.golden-rule code {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 1.2rem;
+  color: var(--bright-copper);
+  display: block;
+  margin-bottom: var(--sp-sm);
+}
+.golden-rule p { color: var(--steel-gray); font-size: 0.88rem; margin: 0; }
+
+/* ─── Footer ──────────────────────────────────────────────────────── */
+footer {
+  margin-left: var(--sidebar-w);
+  background: var(--slate-navy);
+  color: var(--steel-gray);
+  padding: var(--sp-xl);
+  font-size: 0.8rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-lg);
+  border-top: 3px solid var(--bright-copper);
+}
+footer .brand { font-family: 'Inter', sans-serif; font-weight: 700; color: var(--pure-white); }
+footer .brand span { color: var(--bright-copper); }
+
+/* ─── Print ───────────────────────────────────────────────────────── */
+@media print {
+  nav.sidebar { display: none; }
+  header { position: relative; }
+  main { margin-left: 0; padding: var(--sp-xl); }
+  footer { margin-left: 0; }
+  .chapter-header { break-before: page; }
+  .chapter-header:first-of-type { break-before: avoid; }
+  pre { white-space: pre-wrap; }
+}
+
+/* ─── Responsive ──────────────────────────────────────────────────── */
+@media (max-width: 900px) {
+  nav.sidebar { display: none; }
+  main { margin-left: 0; padding: var(--sp-xl) var(--sp-lg); }
+  footer { margin-left: 0; }
+  .cap-grid { grid-template-columns: 1fr; }
+  .arch-grid { grid-template-columns: 1fr; }
+  .validation-levels { grid-template-columns: repeat(2, 1fr); }
+  .metrics-grid { grid-template-columns: 1fr 1fr; }
+}
+
+/* ─── Scroll highlight ────────────────────────────────────────────── */
+section[id] { scroll-margin-top: calc(var(--header-h) + 24px); }
+</style>
 </head>
 <body>
 
+<!-- ═══ HEADER ═══════════════════════════════════════════════════════ -->
 <header>
-    <h1>Nir Lotan</h1>
-    <p>PhD Candidate, Information Systems – Machine Learning</p>
-    <p><a href="https://github.com/nirlotan">GitHub</a> | <a href="https://linkedin.com/in/lotan">LinkedIn</a></p>
+  <div class="header-logo">
+    <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
+      <rect x="1" y="1" width="20" height="20" rx="3" fill="none" stroke="#D96C06" stroke-width="1.5"/>
+      <path d="M6 11 L10 7 L14 11 L10 15 Z" fill="#D96C06"/>
+      <circle cx="16" cy="6" r="2" fill="#D96C06" opacity="0.6"/>
+    </svg>
+    NL<span class="accent"> Practical AI</span>
+  </div>
+  <div class="header-tag">Agentic Coding — Practitioner's Guide · v1.0</div>
+  <div class="lang-switch">
+    <span class="active-lang">EN</span>
+    <span class="sep">|</span>
+    <a href="he-agentic-coding-guide.html">HE</a>
+  </div>
 </header>
 
+<!-- ═══ LAYOUT ═══════════════════════════════════════════════════════ -->
+<div class="layout">
+
+<!-- ═══ SIDEBAR ══════════════════════════════════════════════════════ -->
+<nav class="sidebar">
+  <div class="nav-section-label">Overview</div>
+  <a class="nav-item" href="#hero">Introduction</a>
+  <hr class="nav-divider"/>
+
+  <div class="nav-section-label">Chapters</div>
+
+  <a class="nav-item chapter" href="#ch1">01 — Mental Model</a>
+  <a class="nav-item" href="#ch1-1">You're the Senior</a>
+  <a class="nav-item" href="#ch1-2">Three Industry Trends</a>
+  <a class="nav-item" href="#ch1-3">Agent Strengths & Limits</a>
+  <hr class="nav-divider"/>
+
+  <a class="nav-item chapter" href="#ch2">02 — The Vibe Loop</a>
+  <a class="nav-item" href="#ch2-1">Five-Step Workflow</a>
+  <a class="nav-item" href="#ch2-2">Case: Log Analysis</a>
+  <a class="nav-item" href="#ch2-3">Case: Run Comparison</a>
+  <hr class="nav-divider"/>
+
+  <a class="nav-item chapter" href="#ch3">03 — Multi-Agent Architecture</a>
+  <a class="nav-item" href="#ch3-1">Single-Agent Limitations</a>
+  <a class="nav-item" href="#ch3-2">Agent Pipeline Design</a>
+  <a class="nav-item" href="#ch3-3">Architecture Patterns</a>
+  <hr class="nav-divider"/>
+
+  <a class="nav-item chapter" href="#ch4">04 — Skills</a>
+  <a class="nav-item" href="#ch4-1">What is a Skill</a>
+  <a class="nav-item" href="#ch4-4">The Too-Many-Skills Trap</a>
+  <a class="nav-item" href="#ch4-5">Best Practices</a>
+  <hr class="nav-divider"/>
+
+  <a class="nav-item chapter" href="#ch5">05 — Tools</a>
+  <a class="nav-item" href="#ch5-2">Execution ≠ Reasoning</a>
+  <a class="nav-item" href="#ch5-3">Tool Types</a>
+  <hr class="nav-divider"/>
+
+  <a class="nav-item chapter" href="#ch6">06 — Agent Memory</a>
+  <a class="nav-item" href="#ch6-2">Markdown File Types</a>
+  <a class="nav-item" href="#ch6-4">Stateful Agent Pattern</a>
+  <hr class="nav-divider"/>
+
+  <a class="nav-item chapter" href="#ch7">07 — Validation</a>
+  <a class="nav-item" href="#ch7-3">Four Validation Levels</a>
+  <hr class="nav-divider"/>
+
+  <a class="nav-item chapter" href="#ch8">08 — Environment Setup</a>
+  <hr class="nav-divider"/>
+
+  <a class="nav-item chapter" href="#ch9">09 — Prompt Engineering</a>
+  <a class="nav-item" href="#ch9-2">Investigation Pattern</a>
+  <a class="nav-item" href="#ch9-3">Comparison Pattern</a>
+  <a class="nav-item" href="#ch9-4">Code Writing Pattern</a>
+  <a class="nav-item" href="#ch9-5">Anti-Hallucination Pattern</a>
+  <a class="nav-item" href="#ch9-6">Rubber Duck Agent</a>
+  <hr class="nav-divider"/>
+
+  <a class="nav-item chapter" href="#ch10">10 — Context Management</a>
+  <hr class="nav-divider"/>
+
+  <a class="nav-item chapter" href="#ch11">11 — Evaluation</a>
+  <hr class="nav-divider"/>
+
+  <a class="nav-item chapter" href="#ch12">12 — Full Pipeline</a>
+  <hr class="nav-divider"/>
+
+  <a class="nav-item chapter" href="#ch13">13 — What's Next</a>
+  <hr class="nav-divider"/>
+
+  <a class="nav-item chapter" href="#summary">Executive Summary</a>
+</nav>
+
+<!-- ═══ MAIN ══════════════════════════════════════════════════════════ -->
 <main>
-    <!-- Short Biography Section -->
-    <section id="biography">
-        <h2>Biography</h2>
-        <p>Welcome to the homepage of Nir Lotan, a Machine Learning Researcher and PhD candidate at the University of Haifa. His research bridges the fields of NLP, Computational Social Science, and machine learning with a focus on integrating social information into cutting-edge NLP models.</p>
-        <p>Nir has led multiple teams in engineering, product management, and data science, while deploying over 30 ML/DL projects. He has a strong foundation in hardware, firmware, and software engineering, complemented by several distinguished invention awards and patents pending.</p>
+
+  <!-- HERO -->
+  <section id="hero">
+    <div class="hero">
+      <div class="hero-eyebrow">NL Practical AI — Practitioner's Guide</div>
+      <h1>Agentic &amp; <span>Vibe Coding</span><br/>with AI Agents</h1>
+      <p>A comprehensive, practitioner-first guide to working effectively with coding agents — from prompt engineering and skill design to multi-agent pipelines, validation, and long-term workflow automation.</p>
+      <div class="hero-meta">
+        <div class="hero-meta-item">
+          <span class="label">Audience</span>
+          <span class="value">Engineers &amp; Data Scientists</span>
+        </div>
+        <div class="hero-meta-item">
+          <span class="label">Level</span>
+          <span class="value">Practitioner</span>
+        </div>
+        <div class="hero-meta-item">
+          <span class="label">Chapters</span>
+          <span class="value">13</span>
+        </div>
+        <div class="hero-meta-item">
+          <span class="label">Edition</span>
+          <span class="value">1.0 — 2026</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════ CHAPTER 1 ══════════════════════════════════════════════════ -->
+  <section id="ch1">
+    <div class="chapter-header">
+      <div class="chapter-num">CH 01</div>
+      <h2 class="chapter-title">The Mental Model — How to Think About Agents</h2>
+    </div>
+
+    <section id="ch1-1">
+      <h3>1.1 You Are the Senior — the Agent Is the Talented Junior</h3>
+      <p>The right way to think about your relationship with Copilot, Claude Code, or any other coding agent is like working with a highly skilled assistant who has access to tools — but lacks independent engineering judgment. You define the problem, the constraints, and what "correct" looks like. The agent proposes solutions, writes initial code, explores logs and codebases, and delivers raw material for you to process and validate.</p>
+
+      <div class="insight">
+        <div class="insight-label">Key Principle</div>
+        <p>Engineers at leading organizations keep design decisions and complex judgment calls for themselves, delegating the "work around the work" to agents.</p>
+      </div>
+
+      <p>This division of labor is not about the agent's capability ceiling — it's about engineering accountability. The agent may be fast and impressively fluent, but it does not understand organizational context, long-term trade-offs, or downstream consequences. That responsibility stays with you.</p>
     </section>
 
-    <!-- Research Interests Section -->
-    <section id="research-interests">
-        <h2>Research Interests</h2>
-        <ul>
-            <li>Natural Language Processing (NLP)</li>
-            <li>Computational Social Science</li>
-            <li>Machine Learning and Deep Learning</li>
-            <li>Power/Performance/Thermal Optimization in Hardware</li>
-        </ul>
+    <section id="ch1-2">
+      <h3>1.2 Three Industry Trends in Agentic Coding</h3>
+      <p>Research on how engineers in high-performing organizations use coding agents has identified three consistent patterns:</p>
+
+      <div class="steps">
+        <div class="step">
+          <div class="step-num"></div>
+          <div class="step-body">
+            <h4>The "Work Around the Work" Trend</h4>
+            <p>Most agent-assisted tasks are not core product development. They are log parsing, report generation, run comparison, small scripting — what's often called "glue work" or "meta-work." This is where agents deliver the most value, because these tasks would otherwise remain manual or simply not get done.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num"></div>
+          <div class="step-body">
+            <h4>Engineers Reserve Design Decisions</h4>
+            <p>When a task requires architectural thinking, understanding complex trade-offs, or decisions that affect system structure — engineers prefer to do it themselves. The agent is an execution tool, not a decision-making tool.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num"></div>
+          <div class="step-body">
+            <h4>Automation of Previously Manual Work</h4>
+            <p>Processes that were entirely manual — for example, non-engineers building their own tooling — now get automated because agents lower the entry barrier. People without deep engineering backgrounds can build things that previously required a developer.</p>
+          </div>
+        </div>
+      </div>
     </section>
 
-    <!-- Publications Section -->
-    <section id="publications">
-        <h2>Publications</h2>
-        <ul>
-            <li><a href="#">Detecting Multidimensional Political Incivility on Social Media (EMNLP 2024)</a></li>
-            <li><a href="#">Social World Knowledge: Modeling and Applications (2023)</a></li>
-            <li><a href="#">Predicting Mechanical Ventilation Effects on Six Human Tissue Transcriptomes (2022)</a></li>
-            <li><a href="#">SocialVec: Social Entity Embeddings (2021)</a></li>
-        </ul>
-        <p>For a full list of publications, see <a href="https://scholar.google.com">Google Scholar</a> or <a href="https://orcid.org">ORCID</a>.</p>
+    <section id="ch1-3">
+      <h3>1.3 What Agents Excel At — and Where They Fall Short</h3>
+      <div class="cap-grid">
+        <div class="cap-card good">
+          <h4 class="good-label">Agents Excel At</h4>
+          <ul>
+            <li>Parsing logs and complex data — scanning thousands of lines for patterns</li>
+            <li>Generating summaries, reports, and structured comparisons</li>
+            <li>Exploring and explaining unfamiliar codebases</li>
+            <li>Writing boilerplate, tests, and glue code</li>
+            <li>Initial debugging — forming hypotheses on root causes</li>
+          </ul>
+        </div>
+        <div class="cap-card caution">
+          <h4 class="caution-label">Agents Fall Short On</h4>
+          <ul>
+            <li>Design and architecture decisions — lacking business context and long-term awareness</li>
+            <li>Critical edge cases only domain experts would recognize</li>
+            <li>Logic that cannot be quickly verified — high-risk without validation</li>
+            <li>Anything requiring organizational or stakeholder judgment</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+  </section>
+
+  <!-- ════ CHAPTER 2 ══════════════════════════════════════════════════ -->
+  <section id="ch2">
+    <div class="chapter-header">
+      <div class="chapter-num">CH 02</div>
+      <h2 class="chapter-title">The Basic Workflow — The Vibe Loop</h2>
+    </div>
+
+    <section id="ch2-1">
+      <h3>2.1 The Five-Step Loop</h3>
+      <p>Every productive agent interaction — whether you are a data scientist or a backend engineer — follows the same loop:</p>
+
+      <div class="pipeline">
+        <div class="pipe-step active">
+          <div class="pipe-num">1</div>
+          <div class="pipe-label">Define</div>
+          <div class="pipe-sublabel">Narrow the task</div>
+        </div>
+        <div class="pipe-step">
+          <div class="pipe-num">2</div>
+          <div class="pipe-label">Explore</div>
+          <div class="pipe-sublabel">Let agent work</div>
+        </div>
+        <div class="pipe-step">
+          <div class="pipe-num">3</div>
+          <div class="pipe-label">Validate</div>
+          <div class="pipe-sublabel">Verify output</div>
+        </div>
+        <div class="pipe-step">
+          <div class="pipe-num">4</div>
+          <div class="pipe-label">Refine</div>
+          <div class="pipe-sublabel">Iterative feedback</div>
+        </div>
+        <div class="pipe-step">
+          <div class="pipe-num">5</div>
+          <div class="pipe-label">Automate</div>
+          <div class="pipe-sublabel">Repeat → script</div>
+        </div>
+      </div>
+
+      <h4>Step 1 — Define</h4>
+      <p>This is the most important step. The narrower and more specific your task definition, the better the output. Instead of <code>analyze the logs</code>, write:</p>
+      <pre><code>Parse the routing failure log. Focus on congestion metrics in
+layers M5–M7, and list the top 3 possible root causes with
+evidence from the log.</code></pre>
+      <p>A vague prompt forces the agent to guess your intent. A precise prompt makes it work efficiently.</p>
+
+      <h4>Step 2 — Explore</h4>
+      <p>Let the agent work without interruption. Give it space to search, analyze, propose, and explain. Resist the urge to correct mid-flight — wait for the first draft before steering.</p>
+
+      <h4>Step 3 — Validate</h4>
+      <p>This is the step that separates professional from amateur use. Run the generated code, test edge cases, compare with expected behavior, and apply deterministic checks. Agents sometimes fabricate plausible-sounding logic — validation is non-negotiable.</p>
+
+      <h4>Step 4 — Refine</h4>
+      <p>After validation, return to the agent with structured feedback: <em>"What assumptions did you make?"</em>, <em>"Handle edge case X"</em>, <em>"Improve performance."</em> Each iteration moves the output closer to production quality.</p>
+
+      <h4>Step 5 — Automate</h4>
+      <p>If you've done the same workflow twice, convert it to a script, a skill, or an automated pipeline. The loop compounds over time.</p>
     </section>
 
-    <!-- Research Projects Section -->
-    <section id="projects">
-        <h2>Research Projects</h2>
-        <p>Current Projects:</p>
-        <ul>
-            <li>Multi-modal approach to integrating social information into NLP models, improving the performance of large language models.</li>
-            <li>Optimization of power/performance/thermal efficiency in hardware through innovative machine learning algorithms at Intel.</li>
-        </ul>
+    <section id="ch2-2">
+      <h3>2.2 Example — Investigating a System Failure via Log Analysis</h3>
+      <p>Consider a scenario where a backend run fails due to a routing issue. By opening the full workspace in the IDE — giving the agent access to all files, logs, and reports — rather than pasting only snippets, the agent can autonomously explore and cross-reference.</p>
+      <p>Pasting the relevant logs yields an agent analysis that identifies extreme congestion, elevated density, and blockage anomalies. Specifically, the agent detects that blockage area exceeds core size — a strong indicator of a floorplan error — and recommends targeted reports to confirm. In this case, that was exactly the root cause.</p>
+
+      <div class="insight">
+        <div class="insight-label">Value Delivered</div>
+        <p>A junior engineer diagnosed a complex failure independently, without waiting for a domain expert — saving hours of investigation time and eliminating a bottleneck.</p>
+      </div>
     </section>
 
-    <!-- Contact Section -->
-    <section id="contact">
-        <h2>Contact</h2>
-        <p>If you are interested in collaborating or learning more about my research, feel free to contact me via <a href="mailto:nir.lotan@gmail.com">email</a>.</p>
+    <section id="ch2-3">
+      <h3>2.3 Example — Automated Experiment Run Comparison</h3>
+      <p>When comparing multiple experiment runs, an agent can automatically analyze metrics, generate HTML reports with charts and tables, compare runs side by side, and flag whether the comparison environment is valid (same configuration baseline, no environmental drift). It then produces actionable recommendations: which configuration showed the most significant improvement, which violations need investigation, and what next experiments to run.</p>
+      <p>This replaces a manual Excel comparison that would take hours — and produces a richer, more reproducible output.</p>
     </section>
+  </section>
+
+  <!-- ════ CHAPTER 3 ══════════════════════════════════════════════════ -->
+  <section id="ch3">
+    <div class="chapter-header">
+      <div class="chapter-num">CH 03</div>
+      <h2 class="chapter-title">Multi-Agent Architecture</h2>
+    </div>
+
+    <section id="ch3-1">
+      <h3>3.1 The Problem with a Single Agent on a Long Task</h3>
+      <p>Assigning a single agent to a large, complex task produces two failure modes. First, the agent "fatigues" — output quality degrades over time as it begins to skip details or give shallow answers. Second, the context window fills up and the content is automatically compacted — and the agent is unaware this happened. It continues working as if nothing was lost.</p>
+
+      <div class="callout danger">
+        <p>Context compaction is silent. The agent does not know it has lost information. It continues with false confidence, often producing outputs that contradict earlier analysis.</p>
+      </div>
+
+      <p>This is not a bug — it is a fundamental property of how LLMs work. Design your workflows accordingly.</p>
+    </section>
+
+    <section id="ch3-2">
+      <h3>3.2 The Solution — Agent Pipelines with Defined Roles</h3>
+      <p>Instead of one agent doing everything, build a pipeline of agents, each responsible for one stage. An example three-agent pipeline for complex technical analysis:</p>
+
+      <div class="pipeline">
+        <div class="pipe-step">
+          <div class="pipe-num">A1</div>
+          <div class="pipe-label">Code Analysis</div>
+          <div class="pipe-sublabel">Understand logic flow &amp; coverage path</div>
+        </div>
+        <div class="pipe-step active">
+          <div class="pipe-num">A2</div>
+          <div class="pipe-label">Environment Analysis</div>
+          <div class="pipe-sublabel">Relevant constraints &amp; configs</div>
+        </div>
+        <div class="pipe-step">
+          <div class="pipe-num">A3</div>
+          <div class="pipe-label">Stimulus Finding</div>
+          <div class="pipe-sublabel">Find triggering configuration</div>
+        </div>
+      </div>
+
+      <p>Each agent receives only the context it needs — nothing more — and passes its conclusions to the next. This keeps each individual task short, focused, and high-quality.</p>
+    </section>
+
+    <section id="ch3-3">
+      <h3>3.3 Why Multi-Agent Works</h3>
+      <div class="cap-grid">
+        <div class="cap-card good">
+          <h4>Advantages</h4>
+          <ul>
+            <li><strong>Context isolation</strong> — each agent sees only what it needs, reducing hallucination</li>
+            <li><strong>Reproducibility</strong> — any stage can be re-run independently</li>
+            <li><strong>Controllability</strong> — validate each agent's output before proceeding</li>
+            <li><strong>Quality preservation</strong> — each agent handles a short, focused task</li>
+          </ul>
+        </div>
+        <div class="cap-card caution">
+          <h4>Trade-offs</h4>
+          <ul>
+            <li>More upfront design work</li>
+            <li>Inter-agent communication overhead</li>
+            <li>Harder to debug cross-agent failures</li>
+          </ul>
+        </div>
+      </div>
+
+      <h3>3.4 Architecture Patterns</h3>
+      <div class="arch-grid">
+        <div class="arch-card">
+          <h4>Orchestrator + Sub-Agents <span class="arch-badge">Pattern A</span></h4>
+          <p>A primary orchestrator agent spawns and directs specialized sub-agents.</p>
+          <div class="arch-pro">High automation, user-friendly</div>
+          <div class="arch-con">Extra abstraction layers reduce precision</div>
+          <div class="arch-con">Sub-agents may hit tool-call limits</div>
+        </div>
+        <div class="arch-card">
+          <h4>Procedural Skills <span class="arch-badge">Pattern B</span></h4>
+          <p>Each skill encodes a complete action sequence. The user can interactively steer mid-execution.</p>
+          <div class="arch-pro">Dynamic and interactive</div>
+          <div class="arch-pro">User can guide at each step</div>
+          <div class="arch-con">Less suitable for full automation</div>
+        </div>
+        <div class="arch-card">
+          <h4>Atomic Skills <span class="arch-badge">Pattern C</span></h4>
+          <p>Each skill performs exactly one operation. Maximum granularity and recomposability.</p>
+          <div class="arch-pro">Maximum flexibility</div>
+          <div class="arch-con">Heavy context burden</div>
+          <div class="arch-con">Agent must choose action at every step</div>
+        </div>
+      </div>
+    </section>
+  </section>
+
+  <!-- ════ CHAPTER 4 ══════════════════════════════════════════════════ -->
+  <section id="ch4">
+    <div class="chapter-header">
+      <div class="chapter-num">CH 04</div>
+      <h2 class="chapter-title">Skills — When and How to Use Them</h2>
+    </div>
+
+    <section id="ch4-1">
+      <h3>4.1 What Is a Skill</h3>
+      <p>A skill is a pre-defined capability the agent can invoke. Instead of writing a long prompt every time you want a specific operation, you define a skill that wraps that operation — including the prompt, the required tools, and the expected output format. Think of it as a function you write once and call repeatedly.</p>
+
+      <p>An example production skill library might include: coverage investigation, code analysis, validity check, bug search, environment analysis, and stimulus finding. Each skill performs one focused operation and returns a structured result.</p>
+    </section>
+
+    <h3>4.2 When to Use Skills</h3>
+    <div class="chips">
+      <span class="chip">Recurring operations (2+ times)</span>
+      <span class="chip">Consistent output format required</span>
+      <span class="chip">Named stage in a pipeline</span>
+    </div>
+    <p>If you find yourself writing the same (or very similar) prompt more than twice, that's a signal to convert it into a skill. Skills also enforce output consistency — the agent won't improvise the structure every time.</p>
+
+    <h3>4.3 When Not to Use Skills</h3>
+    <p><strong>One-off tasks:</strong> If it won't recur, don't invest time defining a skill. Use a regular prompt.</p>
+    <p><strong>Exploratory work:</strong> When you don't yet know what you're looking for — investigating a new, unfamiliar bug type — work interactively. Skills are for tasks that have already crystallized into a repeatable pattern.</p>
+
+    <section id="ch4-4">
+      <h3>4.4 Critical Pitfall — Too Many Skills Creates Confusion</h3>
+
+      <div class="callout danger">
+        <p>The agent selects skills based only on their <strong>name and description</strong> — it cannot see the skill content when choosing. With 100+ similar-sounding skills, it will frequently pick the wrong one.</p>
+      </div>
+
+      <p>Research confirms this: as the number of available skills grows, selection accuracy drops — especially when skills have semantic overlap. A well-maintained library of 10–20 skills consistently outperforms a sprawling collection of 100+.</p>
+      <p>The agent sees only the skill's identifier and description when making its selection. If you have skills with similar descriptions, the agent will guess — and guess wrong. Every skill must be <strong>semantically distinguishable</strong> from every other skill at the description level.</p>
+    </section>
+
+    <section id="ch4-5">
+      <h3>4.5 Best Practices for Skills</h3>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Practice</th><th>Bad Example</th><th>Good Example</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Precise naming</td>
+              <td><code>analyze</code></td>
+              <td><code>analyze_routing_congestion_metrics</code></td>
+            </tr>
+            <tr>
+              <td>Narrow scope</td>
+              <td><code>check_logs</code></td>
+              <td><code>extract_blockage_violations_from_routing_log</code></td>
+            </tr>
+            <tr>
+              <td>Quantity limit</td>
+              <td>100+ skills in flat list</td>
+              <td>10–20 skills with clear hierarchy</td>
+            </tr>
+            <tr>
+              <td>Unique description</td>
+              <td>"Analyzes data and finds issues"</td>
+              <td>"Parses routing log and extracts congestion metrics per metal layer"</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </section>
+
+  <!-- ════ CHAPTER 5 ══════════════════════════════════════════════════ -->
+  <section id="ch5">
+    <div class="chapter-header">
+      <div class="chapter-num">CH 05</div>
+      <h2 class="chapter-title">Tools — Execution Capabilities</h2>
+    </div>
+
+    <h3>5.1 What Are Tools (in Agent Context)</h3>
+    <p>Tools are execution capabilities the agent can invoke: file search, running shell commands, executing Python, calling APIs, querying databases. This is what transforms an LLM from a "smart chatbot" into an agent that actually <em>does</em> things. Without tools, the agent can only talk. With tools, it can search, run, analyze, and create.</p>
+
+    <section id="ch5-2">
+      <h3>5.2 The Central Rule — Execution ≠ Reasoning</h3>
+      <p>One of the most common mistakes is asking the LLM to "think" about things that require precise computation. If you need to count log lines, calculate metric averages, or compare numbers — don't ask the agent to guess the answer. Ask it to <strong>run code</strong> that computes it.</p>
+
+      <div class="insight">
+        <div class="insight-label">Core Principle</div>
+        <p>Deterministic task (one right answer) → use a Tool. Judgment task (interpretation, explanation, ranking) → use LLM reasoning. Never conflate the two.</p>
+      </div>
+    </section>
+
+    <section id="ch5-3">
+      <h3>5.3 Tool Types and When to Use Each</h3>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Tool Type</th><th>Use For</th><th>When It's Essential</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span class="td-badge">File / Repo Search</span></td>
+              <td>Code exploration, module mapping, function location</td>
+              <td>Entering an unfamiliar codebase</td>
+            </tr>
+            <tr>
+              <td><span class="td-badge">Code Execution</span></td>
+              <td>Data parsing, numeric computation, chart generation</td>
+              <td>Any task requiring an exact, reproducible answer</td>
+            </tr>
+            <tr>
+              <td><span class="td-badge">Log / File Search</span></td>
+              <td>Pattern filtering, grep-like behavior, large file scanning</td>
+              <td>Finding signals in high-volume output</td>
+            </tr>
+            <tr>
+              <td><span class="td-badge">System / CLI</span></td>
+              <td>Test runs, build commands, deployment scripts</td>
+              <td>End-to-end automation pipelines</td>
+            </tr>
+            <tr>
+              <td><span class="td-badge">External APIs (MCP)</span></td>
+              <td>Live data access, regression databases, bug trackers</td>
+              <td>Agent-initiated data retrieval without manual paste</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <h3>5.4 Tool Pitfalls</h3>
+    <p><strong>Unconstrained tool access:</strong> Without clear constraints, agents run irrelevant operations or waste time. Always specify what the agent is and is not allowed to do.</p>
+    <p><strong>LLM computing instead of executing:</strong> Never ask the agent to "calculate" — ask it to "run code that calculates." The difference is critical for accuracy.</p>
+    <p><strong>Mixing reasoning and execution:</strong> The LLM decides <em>what</em> to do. The tool <em>does</em> it precisely. Blending these roles produces unreliable results.</p>
+  </section>
+
+  <!-- ════ CHAPTER 6 ══════════════════════════════════════════════════ -->
+  <section id="ch6">
+    <div class="chapter-header">
+      <div class="chapter-num">CH 06</div>
+      <h2 class="chapter-title">Markdown Files — The Agent's External Memory</h2>
+    </div>
+
+    <h3>6.1 Why This Is Critical</h3>
+    <p>Agents remember nothing between sessions. Every new conversation starts from zero — the agent has no idea what you worked on yesterday, the conclusions from your last experiment, or the decisions already made. And even within a session, context compaction silently erases information mid-stream.</p>
+    <p>The solution: Markdown files that persist your "memory" outside the agent. Write them at the end of each session, load them at the start of the next. This transforms the agent from a one-off conversation into a continuous assistant with accumulated context.</p>
+
+    <section id="ch6-2">
+      <h3>6.2 Recommended Markdown File Types</h3>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>File</th><th>Contents</th><th>Update Frequency</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>project_context.md</code></td>
+              <td>Project description, constraints, architecture, tooling, key metrics</td>
+              <td>Rarely — foundational context</td>
+            </tr>
+            <tr>
+              <td><code>debug_notes.md</code></td>
+              <td>Bugs found, patterns identified, lessons learned</td>
+              <td>Every session with findings</td>
+            </tr>
+            <tr>
+              <td><code>experiments.md</code></td>
+              <td>Run log — parameters, results, conclusions</td>
+              <td>Every experiment run</td>
+            </tr>
+            <tr>
+              <td><code>decisions.md</code></td>
+              <td>Why approach X over Y, trade-offs, approvals</td>
+              <td>Every architectural decision</td>
+            </tr>
+            <tr>
+              <td><code>session_summary.md</code></td>
+              <td>What was done, findings, decisions, next steps</td>
+              <td>End of every session</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <h3>6.3 Workflow Integration</h3>
+
+    <h4>Session Start — Load Context</h4>
+    <pre><code>Please read these files for context:
+- project_context.md
+- session_summary.md
+- experiments.md
+
+Continue the analysis from where we left off.</code></pre>
+
+    <h4>Session End — Persist State</h4>
+    <pre><code>Summarize today's session in Markdown format for session_summary.md.
+Include:
+- Key findings
+- Decisions made and rationale
+- Open questions
+- Next steps</code></pre>
+
+    <h4>Analysis Input — Markdown as Data</h4>
+    <pre><code>Based on experiments.md, which hyperparameter combination showed
+the best convergence? Suggest the next 3 experiments to run,
+building on what has already been tried.</code></pre>
+
+    <section id="ch6-4">
+      <h3>6.4 Advanced Pattern — Stateful Agent via Markdown</h3>
+      <p>Treat Markdown files as the agent's <em>state object</em>. Each session: load state → work → write updated state. This simulates a long-running agent with persistent memory, even though each session is technically fresh.</p>
+      <pre><code>Session Input:
+  ├── current_task/  (logs, code, data)
+  ├── session_summary.md  (what we know)
+  └── experiments.md  (what we've tried)
+
+→ Agent works with full continuity
+
+Session Output:
+  ├── Updated session_summary.md
+  └── Updated experiments.md<span class="label">PATTERN</span></code></pre>
+    </section>
+  </section>
+
+  <!-- ════ CHAPTER 7 ══════════════════════════════════════════════════ -->
+  <section id="ch7">
+    <div class="chapter-header">
+      <div class="chapter-num">CH 07</div>
+      <h2 class="chapter-title">Validation — Why and How</h2>
+    </div>
+
+    <h3>7.1 The Problem — False Confidence</h3>
+    <p>This may be the single most important point in the entire guide. Agents sometimes fabricate logic or explanations that sound correct but are not grounded in reality — especially when no domain expert is immediately available to cross-check.</p>
+
+    <div class="callout danger">
+      <p>The agent does not say "I'm not sure." It presents its answer with full confidence — even when it's wrong. This creates an <em>illusion of correctness</em> that can lead to costly engineering decisions built on false premises.</p>
+    </div>
+
+    <h3>7.2 The Hybrid Approach</h3>
+    <p>The most effective validation strategy combines deterministic code (which generates exact reports and checks environmental sanity) with agent analysis (which provides insights and explanations). The deterministic layer serves as an anchor — if the agent's output contradicts what the traditional tools show, you know to investigate further.</p>
+
+    <section id="ch7-3">
+      <h3>7.3 Four Validation Levels</h3>
+      <div class="validation-levels">
+        <div class="val-level">
+          <div class="val-num">1</div>
+          <div class="val-name">Sanity</div>
+          <div class="val-desc">Does it run? No crash? Output looks plausible? Takes seconds, catches gross errors.</div>
+        </div>
+        <div class="val-level">
+          <div class="val-num">2</div>
+          <div class="val-name">Correctness</div>
+          <div class="val-desc">Run against known data, compare to expected output. Requires ground truth.</div>
+        </div>
+        <div class="val-level">
+          <div class="val-num">3</div>
+          <div class="val-name">Edge Cases</div>
+          <div class="val-desc">Null inputs, negative numbers, empty strings, boundary values. Agents skip these most often.</div>
+        </div>
+        <div class="val-level">
+          <div class="val-num">4</div>
+          <div class="val-name">Production</div>
+          <div class="val-desc">Performance at scale, failure modes, race conditions, API unavailability.</div>
+        </div>
+      </div>
+    </section>
+
+    <h3>7.4 The Golden Rule</h3>
+    <div class="golden-rule">
+      <code>If you cannot verify the output → do not trust it.</code>
+      <p>The agent is fast. You are precise. This combination works only if the validation step is never skipped.</p>
+    </div>
+  </section>
+
+  <!-- ════ CHAPTER 8 ══════════════════════════════════════════════════ -->
+  <section id="ch8">
+    <div class="chapter-header">
+      <div class="chapter-num">CH 08</div>
+      <h2 class="chapter-title">Work Environment — Setup That Makes a Difference</h2>
+    </div>
+
+    <h3>8.1 Why Full Workspace Access Is Critical</h3>
+    <p>Opening the full workspace in the IDE — so the agent has access to all files, logs, configs, and reports — fundamentally changes the quality of analysis. When the agent sees only a pasted snippet, it works with partial information. When it sees the entire workspace, it can explore independently, cross-reference files, and surface deeper insights.</p>
+    <p>This is often the single biggest "unlock" available to teams that are underutilizing agents.</p>
+
+    <h3>8.2 Recommended Setup</h3>
+    <ul style="padding-left: 20px; margin-bottom: 16px;">
+      <li style="margin-bottom: 8px;"><strong>IDE + AI Copilot</strong> on your development or experiment machine — including remote SSH connections</li>
+      <li style="margin-bottom: 8px;"><strong>All logs, configs, and scripts accessible</strong> within the workspace — not just source code</li>
+      <li style="margin-bottom: 8px;"><strong>CLI agent</strong> (e.g., Claude Code) for tasks requiring command execution or long pipelines</li>
+      <li style="margin-bottom: 8px;"><strong>Markdown memory files</strong> in the repository root (as described in Chapter 6)</li>
+    </ul>
+
+    <h3>8.3 Work Modes</h3>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Mode</th><th>When to Use</th><th>Example</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="td-badge">Chat</span></td>
+            <td>Quick questions, explanations, initial exploration</td>
+            <td>"What does this function do?"</td>
+          </tr>
+          <tr>
+            <td><span class="td-badge">Agent Mode</span></td>
+            <td>Multi-step workflows, deep analysis, code generation</td>
+            <td>"Investigate this failure end-to-end"</td>
+          </tr>
+          <tr>
+            <td><span class="td-badge">CLI / Terminal</span></td>
+            <td>Automation, script execution, pipelines</td>
+            <td>"Run comparison script on 3 experiment runs"</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ════ CHAPTER 9 ══════════════════════════════════════════════════ -->
+  <section id="ch9">
+    <div class="chapter-header">
+      <div class="chapter-num">CH 09</div>
+      <h2 class="chapter-title">Prompt Engineering — How to Direct an Agent</h2>
+    </div>
+
+    <h3>9.1 The Foundational Rule</h3>
+    <div class="golden-rule">
+      <code>Garbage prompt → garbage output.</code>
+      <p>The gap between a good and a bad prompt is not a marginal improvement — it is the difference between a useful result and wasted time.</p>
+    </div>
+
+    <section id="ch9-2">
+      <h3>9.2 Pattern — Investigation / Failure Analysis</h3>
+      <pre><code>Analyze the following logs:
+[paste logs or reference file path]
+
+Focus on:
+- Primary failure cause (with evidence from the log)
+- Secondary contributing factors
+- Whether environment or configuration issues could be involved
+
+Output:
+- Structured explanation of the failure chain
+- Top 3 hypotheses, ranked by likelihood
+- For each hypothesis: evidence that supports it, and what
+  test would confirm or deny it<span class="label">PROMPT TEMPLATE</span></code></pre>
+    </section>
+
+    <section id="ch9-3">
+      <h3>9.3 Pattern — Experiment Run Comparison</h3>
+      <pre><code>Compare these experiment runs:
+[run1 details]
+[run2 details]
+
+Output:
+- Table of key metric comparisons
+- Which run is better overall and why
+- Trade-offs (where run1 wins, where run2 wins)
+- Recommendations for next experiments
+- Confirm comparison validity (same baseline environment and config)<span class="label">PROMPT TEMPLATE</span></code></pre>
+    </section>
+
+    <section id="ch9-4">
+      <h3>9.4 Pattern — Code Writing</h3>
+      <pre><code>Write a Python function that:
+- Input:  [describe input format and type]
+- Output: [describe output format and type]
+- Constraints: [edge cases, performance requirements, limits]
+
+Also include:
+- Type hints and docstring
+- Unit tests covering: normal case + at least 2 edge cases
+- Error handling for invalid input<span class="label">PROMPT TEMPLATE</span></code></pre>
+    </section>
+
+    <section id="ch9-5">
+      <h3>9.5 Pattern — Anti-Hallucination / Iterative Refinement</h3>
+      <pre><code>Double-check your previous answer:
+- What assumptions did you make? Are they valid given the data?
+- What could be wrong with your analysis?
+- Is there an alternative explanation you didn't consider?
+- How would you validate your conclusions?<span class="label">PROMPT TEMPLATE</span></code></pre>
+      <p>This pattern is critical. It forces the agent to pause and stress-test its own reasoning rather than confidently proceeding on flawed premises. Use it whenever the stakes of an incorrect answer are high.</p>
+    </section>
+
+    <section id="ch9-6">
+      <h3>9.6 Pattern — The Rubber Duck Agent</h3>
+      <p>Classic rubber-duck debugging says: explain your problem to a rubber duck, and the act of articulating it reveals the answer. The agent version inverts the trick — the agent <em>is</em> the duck, but a duck that asks back.</p>
+      <p>Spin up a dedicated agent whose only job is to interrogate you, not to write code or produce a solution. It probes assumptions, asks for missing context, and reflects your reasoning back at you until the real problem is exposed. By the time you finish answering, the next step is usually obvious — and your prompt to the executing agent is now sharp enough to actually work.</p>
+      <pre><code>You are my Rubber Duck Agent. You do NOT write code,
+propose solutions, or take actions.
+
+Your only job:
+- Ask me clarifying questions, one at a time
+- Challenge my assumptions and surface what I'm taking for granted
+- Reflect my reasoning back to me in your own words
+- Point out gaps, contradictions, or missing context
+- Keep asking until the real problem (not the symptom) is clear
+
+Topic I want to think through:
+[describe the problem, bug, design decision, or stuck point]
+
+Begin with the single most important question.<span class="label">PROMPT TEMPLATE</span></code></pre>
+      <div class="insight"><p><strong>When to use it:</strong> stuck on a bug, unsure how to scope a task, before writing a big prompt for an executing agent, or any time you catch yourself typing a wall of context and realizing you don't actually understand the problem yet.</p></div>
+      <p><strong>Pipeline tip:</strong> pair it with your executing agent. Duck first to sharpen the question, then hand the refined problem statement to the agent that actually does the work. The two-agent split — <em>thinker</em> and <em>doer</em> — consistently beats a single agent trying to do both.</p>
+    </section>
+  </section>
+
+  <!-- ════ CHAPTER 10 ══════════════════════════════════════════════════ -->
+  <section id="ch10">
+    <div class="chapter-header">
+      <div class="chapter-num">CH 10</div>
+      <h2 class="chapter-title">Context Management — Working Within Limits</h2>
+    </div>
+
+    <h3>10.1 The Problem</h3>
+    <p>Every agent operates within a finite context window. When it fills, one of two things happens: the agent refuses further input, or the content is compacted automatically. The compaction problem is insidious — the agent doesn't know it lost information and continues working as if everything is intact.</p>
+    <p>A context compaction event (e.g., 54,000 tokens compressed to 24,000) can happen externally, triggered by the platform — not by the agent itself. The agent has no awareness of the event.</p>
+
+    <h3>10.2 Mitigation Strategies</h3>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num"></div>
+        <div class="step-body">
+          <h4>Work in Chunks</h4>
+          <p>Instead of pasting 10,000 lines of logs at once, split into chunks and analyze each independently. Merge conclusions at the end.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num"></div>
+        <div class="step-body">
+          <h4>Re-anchor Key Context Periodically</h4>
+          <p>In long sessions, periodically re-state the most important facts. Don't assume the agent remembers what you said 20 messages ago.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num"></div>
+        <div class="step-body">
+          <h4>Persist Intermediate Results</h4>
+          <p>Every time the agent reaches an important conclusion, save it to an external file. If context is truncated, you have a backup.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num"></div>
+        <div class="step-body">
+          <h4>Use Multi-Agent Design</h4>
+          <p>Instead of one long session, split into short sessions with separate agents — each receiving only what it needs. This is the architectural solution to context limits.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════ CHAPTER 11 ══════════════════════════════════════════════════ -->
+  <section id="ch11">
+    <div class="chapter-header">
+      <div class="chapter-num">CH 11</div>
+      <h2 class="chapter-title">Evaluation — Knowing Your Agent Is Actually Working</h2>
+    </div>
+
+    <h3>11.1 Why Systematic Evaluation Is Non-Negotiable</h3>
+    <p>If you are building workflows based on agents, you must know whether they actually work. "It feels like it's working" is not a measurement. You need metrics — especially before deploying a skill or pipeline to other users.</p>
+    <p>Build dedicated evaluators for each skill, using a mix of synthetic data (files injected with known issues) and real-world examples from actual use cases.</p>
+
+    <h3>11.2 Recommended Metrics</h3>
+    <div class="metrics-grid">
+      <div class="metric-card">
+        <div class="metric-icon">🎯</div>
+        <div class="metric-name">Precision</div>
+        <div class="metric-desc">What fraction of the agent's answers were correct?</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-icon">📡</div>
+        <div class="metric-name">Recall</div>
+        <div class="metric-desc">What fraction of the correct answers did the agent find?</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-icon">⚡</div>
+        <div class="metric-name">Tool Call Count</div>
+        <div class="metric-desc">Is the agent working efficiently, or wasting calls?</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-icon">⏱</div>
+        <div class="metric-name">Execution Time</div>
+        <div class="metric-desc">How long does each task take end-to-end?</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-icon">👥</div>
+        <div class="metric-name">User Feedback</div>
+        <div class="metric-desc">Did it help? Did it surface issues the user didn't know existed?</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-icon">🔁</div>
+        <div class="metric-name">Regression Rate</div>
+        <div class="metric-desc">Does improving one skill degrade another?</div>
+      </div>
+    </div>
+
+    <h3>11.3 Improving Prompts — The Feedback Loop</h3>
+    <p>Prompt improvement is currently manual in most teams: change a prompt, run the evaluation suite, check whether metrics improved. The long-term goal is to automate this loop — scripts that collect agent usage data, identify prompt failures, and suggest targeted improvements. This transforms prompt engineering from artisanal to systematic.</p>
+  </section>
+
+  <!-- ════ CHAPTER 12 ══════════════════════════════════════════════════ -->
+  <section id="ch12">
+    <div class="chapter-header">
+      <div class="chapter-num">CH 12</div>
+      <h2 class="chapter-title">The Complete Pipeline — Putting It All Together</h2>
+    </div>
+
+    <p>Here is what a complete, production-quality agent workflow looks like when all the principles in this guide are applied:</p>
+
+    <div class="pipeline">
+      <div class="pipe-step">
+        <div class="pipe-num">0</div>
+        <div class="pipe-label">Load Memory</div>
+        <div class="pipe-sublabel">project_context + last session</div>
+      </div>
+      <div class="pipe-step active">
+        <div class="pipe-num">1</div>
+        <div class="pipe-label">Explore</div>
+        <div class="pipe-sublabel">Open-ended analysis</div>
+      </div>
+      <div class="pipe-step">
+        <div class="pipe-num">2</div>
+        <div class="pipe-label">Skills</div>
+        <div class="pipe-sublabel">Activate targeted skills</div>
+      </div>
+      <div class="pipe-step">
+        <div class="pipe-num">3</div>
+        <div class="pipe-label">Tools</div>
+        <div class="pipe-sublabel">Execute deterministic ops</div>
+      </div>
+      <div class="pipe-step">
+        <div class="pipe-num">4</div>
+        <div class="pipe-label">Reason</div>
+        <div class="pipe-sublabel">Hypotheses + ranking</div>
+      </div>
+      <div class="pipe-step">
+        <div class="pipe-num">5</div>
+        <div class="pipe-label">Validate</div>
+        <div class="pipe-sublabel">Deterministic checks</div>
+      </div>
+      <div class="pipe-step">
+        <div class="pipe-num">6</div>
+        <div class="pipe-label">Persist</div>
+        <div class="pipe-sublabel">Write session_summary.md</div>
+      </div>
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Stage</th><th>Action</th><th>Principle Applied</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>0 — Load Memory</td><td>Load <code>project_context.md</code> and <code>session_summary.md</code></td><td>Stateful agent via Markdown (Ch. 6)</td></tr>
+          <tr><td>1 — Exploration</td><td>Open-ended: "Analyze the current failure based on these logs."</td><td>Let agent explore freely first (Ch. 2)</td></tr>
+          <tr><td>2 — Skills</td><td>Activate: <code>extract_metrics</code>, <code>check_env_validity</code>, <code>detect_anomalies</code></td><td>Narrow, precise skills (Ch. 4)</td></tr>
+          <tr><td>3 — Tools</td><td>Run scripts, read files, compute comparisons</td><td>Execution ≠ reasoning (Ch. 5)</td></tr>
+          <tr><td>4 — Reasoning</td><td>Agent proposes root causes, ranks hypotheses, explains</td><td>LLM for judgment, tool for computation (Ch. 5)</td></tr>
+          <tr><td>5 — Validation</td><td>Run deterministic checks, compare to expected results</td><td>Four validation levels (Ch. 7)</td></tr>
+          <tr><td>6 — Persist</td><td>Write <code>session_summary.md</code> with findings and next steps</td><td>Markdown memory (Ch. 6)</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ════ CHAPTER 13 ══════════════════════════════════════════════════ -->
+  <section id="ch13">
+    <div class="chapter-header">
+      <div class="chapter-num">CH 13</div>
+      <h2 class="chapter-title">What's Next — Self-Improvement Loops and MCP</h2>
+    </div>
+
+    <h3>13.1 The Self-Improvement Loop</h3>
+    <p>The next frontier in agentic workflows is using the agent to improve the agent. Recurring exploration and feedback loops — where the agent identifies patterns in its own failures or in user interactions — can be converted into feature improvements, better prompts, or new skills with the help of the same AI infrastructure. This closes the loop: the agent gets better at its domain as you use it.</p>
+
+    <h3>13.2 MCP — Model Context Protocol</h3>
+    <p>The emerging standard for connecting agents to live data sources is the Model Context Protocol (MCP). Rather than the user manually pasting data into the agent, the agent connects directly to regression databases, experiment runners, bug trackers, and dashboards — and pulls the data it needs autonomously.</p>
+
+    <div class="insight">
+      <div class="insight-label">Paradigm Shift</div>
+      <p>From "I bring data to the agent" → to "the agent goes to the data itself." MCP makes agents first-class citizens in your data infrastructure.</p>
+    </div>
+
+    <p>MCP-connected agents can autonomously query live experiment results, cross-reference multiple data sources, and produce analyses that would previously require manual data assembly — removing one of the biggest remaining friction points in agent-assisted engineering workflows.</p>
+  </section>
+
+  <!-- ════ EXECUTIVE SUMMARY ══════════════════════════════════════════ -->
+  <section id="summary">
+    <div class="chapter-header">
+      <div class="chapter-num">SUMMARY</div>
+      <h2 class="chapter-title">Executive Summary</h2>
+    </div>
+
+    <p>The eight principles that define high-performance agentic engineering:</p>
+
+    <div class="exec-summary">
+      <table>
+        <thead>
+          <tr><th>Principle</th><th>In Practice</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Agent = Force Multiplier</td>
+            <td>The agent does not replace you — it multiplies your throughput. Your judgment remains the constraint.</td>
+          </tr>
+          <tr>
+            <td>Work Around the Work</td>
+            <td>The biggest value is in automating glue work: log parsing, report generation, run comparison, scripting.</td>
+          </tr>
+          <tr>
+            <td>Multi-Agent > Mega-Agent</td>
+            <td>Decompose large tasks into small, focused agents. Quality stays high; context stays clean.</td>
+          </tr>
+          <tr>
+            <td>Skills: Narrow + Clear</td>
+            <td>A few precisely-named skills with unique descriptions beats a sprawling library that confuses the agent.</td>
+          </tr>
+          <tr>
+            <td>Tools for Execution</td>
+            <td>Deterministic computation belongs in tools. Judgment and interpretation belong in the LLM.</td>
+          </tr>
+          <tr>
+            <td>Markdown = Long-Term Memory</td>
+            <td>Context files between sessions give the agent continuity. Write them at session end; load them at session start.</td>
+          </tr>
+          <tr>
+            <td>Always Validate</td>
+            <td>The agent sounds confident even when wrong. Validate at all four levels, every time.</td>
+          </tr>
+          <tr>
+            <td>Hybrid Approach</td>
+            <td>Deterministic code as anchor + AI insights = the right architecture for high-stakes engineering work.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
 </main>
+</div>
 
+<!-- ═══ FOOTER ════════════════════════════════════════════════════════ -->
 <footer>
-    <p>&copy; 2024 Nir Lotan | <a href="mailto:nir.lotan@gmail.com">Contact</a></p>
+  <div class="brand">NL <span>Practical AI</span> Consulting</div>
+  <div>Agentic &amp; Vibe Coding — Practitioner's Guide · Edition 1.0 · 2026</div>
+  <div>Internal use · All principles based on industry-validated practice</div>
 </footer>
+
+<!-- ═══ NAV HIGHLIGHT SCRIPT ══════════════════════════════════════════ -->
+<script>
+(function(){
+  const navLinks = document.querySelectorAll('nav.sidebar .nav-item');
+  const sections = document.querySelectorAll('section[id]');
+  let ticking = false;
+
+  function update(){
+    const scrollY = window.scrollY + 100;
+    let current = '';
+    sections.forEach(s => {
+      if(scrollY >= s.offsetTop) current = s.id;
+    });
+    navLinks.forEach(a => {
+      a.classList.toggle('active', a.getAttribute('href') === '#' + current);
+    });
+    ticking = false;
+  }
+
+  window.addEventListener('scroll', ()=>{
+    if(!ticking){ requestAnimationFrame(update); ticking = true; }
+  }, {passive:true});
+
+  update();
+})();
+</script>
 
 </body>
 </html>
